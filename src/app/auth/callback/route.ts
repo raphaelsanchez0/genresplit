@@ -1,5 +1,8 @@
+import { cookieNames } from "@/utils/constants";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
+
+const pathToRouteOnToSuccessfulAuth = "/home";
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
@@ -10,16 +13,16 @@ export async function GET(request: Request) {
   if (code) {
     const cookieStore = cookies();
 
-    // Store the authorization code in a cookie
     cookieStore.set({
-      name: "spotify_auth_code",
+      name: cookieNames.SPOTIFY_AUTH_CODE,
       value: code,
       httpOnly: true,
       path: "/",
     });
 
-    // Redirect to the next page (dashboard or specified next page)
-    return NextResponse.redirect(`${origin}${next}/dashboard`);
+    return NextResponse.redirect(
+      `${origin}${next}${pathToRouteOnToSuccessfulAuth}`
+    );
   }
 
   // Redirect to an error page if the code is not present

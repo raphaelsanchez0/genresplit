@@ -17,3 +17,7 @@ export const spotify = {
   ].join(" "),
   REDIRECT_URI: "http://localhost:3000/auth/callback/",
 };
+
+export const cookieNames = {
+  SPOTIFY_AUTH_CODE: "spotify_auth_code",
+};
