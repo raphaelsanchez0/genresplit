@@ -37,9 +37,9 @@ const config = {
         poppins: ["var(--font-poppins)", ...fontFamily.sans],
       },
       colors: {
-        "primary-color": "#8acb88",
+        "primary-color": "#223122",
         "secondary-color": "#192524",
-        "accent-color": "#223122",
+        "accent-color": "#8acb88",
       },
     },
   },
