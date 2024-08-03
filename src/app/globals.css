@@ -5,7 +5,7 @@
 :root {
   --primary-color: "#8acb88";
   --secondary-color: "#192524";
-  --accent-color: "##223122";
+  --accent-color: "#223122";
 }
 
 @layer base {
