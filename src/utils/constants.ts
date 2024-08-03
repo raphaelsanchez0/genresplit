@@ -15,5 +15,5 @@ export const spotify = {
     "user-read-email",
     "playlist-read-collaborative",
   ].join(" "),
-  REDIRECT_URI: "http://localhost:3000/callback/",
+  REDIRECT_URI: "http://localhost:3000/auth/callback/",
 };
