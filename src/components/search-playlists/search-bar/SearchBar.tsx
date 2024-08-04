@@ -14,6 +14,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { useRouter } from "next/navigation";
 
 export default function SearchBar() {
   const formSchema = z.object({
@@ -27,9 +28,14 @@ export default function SearchBar() {
     },
   });
 
+  const router = useRouter();
+
+  function onSubmit(data: z.infer<typeof formSchema>) {
+    router.push(`/search?q=${data.query}`);
+  }
   return (
     <Form {...form}>
-      <form>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
           control={form.control}
           name="query"
@@ -41,7 +47,7 @@ export default function SearchBar() {
                   <Input placeholder="Search" className="pl-8" {...field} />
                 </div>
               </FormControl>
-              <FormMessage />
+              <FormMessage className="text-center" />
             </FormItem>
           )}
         />
