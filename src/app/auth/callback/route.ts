@@ -2,7 +2,7 @@ import { cookieNames } from "@/utils/constants";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
-const pathToRouteOnToSuccessfulAuth = "/feed";
+const pathToRouteOnToSuccessfulAuth = "/search";
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
