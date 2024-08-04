@@ -16,6 +16,7 @@ export const spotify = {
     "playlist-read-collaborative",
   ].join(" "),
   REDIRECT_URI: "http://localhost:3000/auth/callback/",
+  BASE_URL: "https://api.spotify.com/v1",
 };
 
 export const cookieNames = {

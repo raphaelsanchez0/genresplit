@@ -53,3 +53,10 @@ export async function userAuthenticated() {
     return false;
   }
 }
+
+export async function getSpotifyAuthorizationCode() {
+  const code = cookies().get(cookieNames.SPOTIFY_AUTH_CODE);
+  if (!code) {
+    throw new SpotifyTokenError("No Token Found");
+  }
+}

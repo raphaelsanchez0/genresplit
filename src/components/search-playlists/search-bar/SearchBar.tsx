@@ -47,7 +47,7 @@ export default function SearchBar() {
                   <Input placeholder="Search" className="pl-8" {...field} />
                 </div>
               </FormControl>
-              <FormMessage className="text-center" />
+              <FormMessage className="text-center`" />
             </FormItem>
           )}
         />
