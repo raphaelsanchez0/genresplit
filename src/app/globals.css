@@ -9,7 +9,7 @@
 }
 
 .page {
-  @apply bg-primary-color flex-grow flex-shrink basis-auto;
+  @apply bg-white flex-grow flex-shrink basis-auto flex justify-center;
 }
 
 @layer base {
