@@ -1,12 +1,14 @@
+"use client";
 import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import Link from "next/link";
-import { createAuthURL } from "@/utils/authURLHelper";
+
 import { cookieNames } from "@/utils/constants";
-export default function LoginButton() {
+
+export default function LogoutButton() {
   return (
     <Button asChild>
-      <Link href={createAuthURL()}>Login</Link>
+      <Link href="/logout">Logout</Link>
     </Button>
   );
 }

@@ -5,7 +5,6 @@ import {
   SpotifyDataError,
   SpotifyTokenError,
 } from "./errors";
-import axios from "axios";
 
 const defaultResponseType = "code";
 const defaultShowDialog = true;
@@ -29,30 +28,28 @@ export async function getUser() {
     throw new SpotifyAuthError("Spotify authorization code is missing");
   }
 
-  try {
-    const response = await axios.get("https://api.spotify.com/v1/me", {
+  if (spotifyAuthCode) {
+    const response = await fetch("https://api.spotify.com/v1/me", {
       headers: {
         Authorization: `Bearer ${spotifyAuthCode}`,
       },
     });
 
-    if (response.status === 200) {
-      return response.data;
-    } else {
-      throw new SpotifyDataError("Failed to fetch Spotify profile data");
+    if (response.ok) {
+      const data = await response.json();
+      return data;
     }
-  } catch (error: any) {
-    if (error.response && error.response.status) {
-      if (error.response.status === 401) {
-        throw new SpotifyAuthError("Unauthorized access to Spotify API");
-      } else {
-        throw new SpotifyDataError(
-          `Spotify API returned status ${error.response.status}`
-        );
-      }
-    } else {
-      console.error("Unexpected error:", error);
-      throw new Error("An unexpected error occurred");
-    }
+    throw new SpotifyDataError("Failed to fetch Spotify profile data");
+  }
+  throw new SpotifyAuthError("Spotify authorization code is missing");
+}
+
+export async function userAuthenticated() {
+  try {
+    await getUser();
+    return true;
+  } catch (e) {
+    console.log(e);
+    return false;
   }
 }
