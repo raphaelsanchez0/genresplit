@@ -54,9 +54,10 @@ export async function userAuthenticated() {
   }
 }
 
-export async function getSpotifyAuthorizationCode() {
-  const code = cookies().get(cookieNames.SPOTIFY_AUTH_CODE);
+export function getSpotifyAuthorizationCode() {
+  const code = cookies().get(cookieNames.SPOTIFY_AUTH_CODE)?.value;
   if (!code) {
     throw new SpotifyTokenError("No Token Found");
   }
+  return code;
 }
