@@ -1,36 +1,46 @@
 "use client";
 import { fetchPlaylistWithURL } from "@/utils/api/playlists/playlists";
 import { getSpotifyToken } from "@/utils/authHelpers";
+import { PlaylistCollectionResponse } from "@/utils/types";
+import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import Playlist from "../playlist/Playlist";
 
 export default function PlaylistList({ token }: { token: string }) {
-  const [playlists, setPlaylists] = useState([]);
+  const [playlists, setPlaylists] = useState<
+    SpotifyApi.PlaylistObjectSimplified[]
+  >([]);
   const searchParams = useSearchParams();
   const query = searchParams.get("q");
 
   useEffect(() => {
     const fetchPlaylists = async () => {
-      let playlist;
-
       if (query) {
-        playlist = await fetchPlaylistWithURL(
-          `https://api.spotify.com/v1/search?q=${query}&type=playlist`,
-          token
-        );
+        const playlists: SpotifyApi.PlaylistSearchResponse =
+          await fetchPlaylistWithURL(
+            `https://api.spotify.com/v1/search?q=${query}&type=playlist`,
+            token
+          );
+        setPlaylists(playlists.playlists.items);
       } else {
-        playlist = await fetchPlaylistWithURL(
-          "https://api.spotify.com/v1/browse/featured-playlists",
-          token
-        );
+        const playlists: SpotifyApi.ListOfCurrentUsersPlaylistsResponse =
+          await fetchPlaylistWithURL(
+            `https://api.spotify.com/v1/me/playlists`,
+            token
+          );
+        setPlaylists(playlists.items);
       }
-      setPlaylists(playlist);
     };
 
     fetchPlaylists();
   }, [query]);
 
-  console.log(playlists);
-
-  return <div>PlaylistList</div>;
+  return (
+    <div className="flex ">
+      {playlists.map((playlist) => (
+        <Playlist key={playlist.id} playlist={playlist} />
+      ))}
+    </div>
+  );
 }

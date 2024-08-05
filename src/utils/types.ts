@@ -1,1 +1,4 @@
-export interface Playlist {}
+//Spotify Types
+
+export interface PlaylistCollectionResponse
+  extends SpotifyApi.PlaylistSearchResponse {}
