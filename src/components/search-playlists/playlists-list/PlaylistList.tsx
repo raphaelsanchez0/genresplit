@@ -36,7 +36,7 @@ export default function PlaylistList({ token }: { token: string }) {
   }, [query]);
 
   return (
-    <div className="flex ">
+    <div className="grid grid-cols-3 w-full">
       {playlists.map((playlist) => (
         <Playlist key={playlist.id} playlist={playlist} />
       ))}
