@@ -18,8 +18,8 @@ export async function GET(request: Request) {
       const cookieStore = cookies();
 
       cookieStore.set({
-        name: cookieNames.SPOTIFY_AUTH_CODE,
-        value: code,
+        name: cookieNames.SPOTIFY_TOKEN,
+        value: tokenData.access_token,
         httpOnly: true,
         path: "/",
       });

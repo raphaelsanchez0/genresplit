@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
   const cookieStore = cookies();
-  cookieStore.set(cookieNames.SPOTIFY_AUTH_CODE, "", {
+  cookieStore.set(cookieNames.SPOTIFY_TOKEN, "", {
     httpOnly: true,
     path: "/",
     maxAge: 0,

@@ -1,6 +1,6 @@
 "use client";
 import { fetchPlaylistWithURL } from "@/utils/api/playlists/playlists";
-import { getSpotifyAuthorizationCode } from "@/utils/authHelpers";
+import { getSpotifyToken } from "@/utils/authHelpers";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 

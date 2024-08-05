@@ -50,7 +50,7 @@ export async function exchangeCodeForToken(code: string): Promise<any> {
 
 export async function getUser() {
   const cookieStore = cookies();
-  const spotifyAuthCode = cookieStore.get(cookieNames.SPOTIFY_AUTH_CODE)?.value;
+  const spotifyAuthCode = cookieStore.get(cookieNames.SPOTIFY_TOKEN)?.value;
 
   if (!spotifyAuthCode) {
     throw new SpotifyAuthError("Spotify authorization code is missing");
@@ -81,8 +81,8 @@ export async function userAuthenticated() {
   }
 }
 
-export function getSpotifyAuthorizationCode() {
-  const code = cookies().get(cookieNames.SPOTIFY_AUTH_CODE)?.value;
+export function getSpotifyToken() {
+  const code = cookies().get(cookieNames.SPOTIFY_TOKEN)?.value;
   if (!code) {
     throw new SpotifyTokenError("No Token Found");
   }
