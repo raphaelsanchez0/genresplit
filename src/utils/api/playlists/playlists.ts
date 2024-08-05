@@ -1,7 +1,14 @@
-import { SpotifyClient } from "../axiosClient";
+export async function fetchPlaylistWithURL(url: string, token: string) {
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
 
-export async function getFeaturedPlaylists() {
-  const res = await fetch(
-    "https://api.spotify.com/v1/browse/featured-playlists"
-  );
+  const response = await fetch(url, {
+    headers,
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP Error, Status ${response.status}`);
+  }
+  return response.json();
 }

@@ -18,3 +18,10 @@ export class SpotifyDataError extends Error {
     this.name = "SpotifyDataError";
   }
 }
+
+export class SpotifyExchangeCodeForTokenError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "SpotifyExchangeCodeForTokenError";
+  }
+}

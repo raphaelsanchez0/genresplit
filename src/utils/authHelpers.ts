@@ -3,6 +3,7 @@ import { cookieNames, spotify } from "./constants";
 import {
   SpotifyAuthError,
   SpotifyDataError,
+  SpotifyExchangeCodeForTokenError,
   SpotifyTokenError,
 } from "./errors";
 
@@ -12,12 +13,39 @@ const defaultShowDialog = true;
 export function createAuthURL(
   authEndpoint: string = spotify.AUTH_ENDPOINT,
   clientID: string = spotify.CLIENT_ID,
+  clientSecret: string = spotify.CLIENT_SECRET,
   redirectURI: string = spotify.REDIRECT_URI,
   responseType: string = defaultResponseType,
   scopes: string = spotify.SCOPES,
   showDialog = defaultShowDialog
 ) {
   return `${authEndpoint}?client_id=${clientID}&redirect_uri=${redirectURI}&response_type=${responseType}&scope=${scopes}&show_dialog=${showDialog}`;
+}
+
+export async function exchangeCodeForToken(code: string): Promise<any> {
+  const response = await fetch(spotify.TOKEN_ENDPOINT, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Authorization:
+        "Basic " +
+        Buffer.from(spotify.CLIENT_ID + ":" + spotify.CLIENT_SECRET).toString(
+          "base64"
+        ),
+    },
+    body: new URLSearchParams({
+      grant_type: "authorization_code",
+      code: code,
+      redirect_uri: spotify.REDIRECT_URI,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new SpotifyExchangeCodeForTokenError(
+      "Failed to exchange code for token"
+    );
+  }
+  return response.json();
 }
 
 export async function getUser() {
@@ -49,7 +77,6 @@ export async function userAuthenticated() {
     await getUser();
     return true;
   } catch (e) {
-    console.log(e);
     return false;
   }
 }
