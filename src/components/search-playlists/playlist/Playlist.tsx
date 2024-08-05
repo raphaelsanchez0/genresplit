@@ -4,16 +4,18 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Colors } from "@/utils/constants";
 import React from "react";
 
-export default function Playlist({
-  playlist,
-}: {
+interface PlaylistProps {
+  selected: boolean;
   playlist: SpotifyApi.PlaylistObjectSimplified;
-}) {
+}
+
+export default function Playlist({ playlist, selected }: PlaylistProps) {
   console.log(playlist);
   return (
-    <Card>
+    <Card style={{ backgroundColor: selected ? Colors.ACCENT : "white" }}>
       <div className="flex p-4">
         {playlist.images && <img src={playlist.images[0].url} width={100} />}
         <CardHeader>

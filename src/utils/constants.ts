@@ -1,5 +1,5 @@
-const spotifyClientSecret = process.env.SPOTIFY_CLIENT_SECRET;
-
+const spotifyClientSecret = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_SECRET;
+debugger;
 if (!spotifyClientSecret) {
   throw new Error("No client Secret environment variable");
 }
@@ -24,4 +24,10 @@ export const spotify = {
 
 export const cookieNames = {
   SPOTIFY_TOKEN: "spotify_token",
+};
+
+export const Colors = {
+  PRIMARY: "#223122",
+  SECONDARY: "#192524",
+  ACCENT: "#8acb88",
 };

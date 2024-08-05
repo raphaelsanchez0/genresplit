@@ -38,7 +38,7 @@ export default function PlaylistList({ token }: { token: string }) {
   return (
     <div className="grid grid-cols-3 w-full">
       {playlists.map((playlist) => (
-        <Playlist key={playlist.id} playlist={playlist} />
+        <Playlist key={playlist.id} playlist={playlist} selected={false} />
       ))}
     </div>
   );

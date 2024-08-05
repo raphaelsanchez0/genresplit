@@ -18,7 +18,7 @@ import { useRouter } from "next/navigation";
 
 export default function SearchBar() {
   const formSchema = z.object({
-    query: z.string().min(1, { message: "Please enter a search query" }),
+    query: z.string(),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
