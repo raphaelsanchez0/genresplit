@@ -23,5 +23,5 @@ export const spotify = {
 };
 
 export const cookieNames = {
-  SPOTIFY_TOKEN: "spotify_auth_token",
+  SPOTIFY_TOKEN: "spotify_token",
 };

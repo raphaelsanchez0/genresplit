@@ -30,5 +30,7 @@ export default function PlaylistList({ token }: { token: string }) {
     fetchPlaylists();
   }, [query]);
 
+  console.log(playlists);
+
   return <div>PlaylistList</div>;
 }
