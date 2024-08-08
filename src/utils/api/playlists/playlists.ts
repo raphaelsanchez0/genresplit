@@ -1,4 +1,4 @@
-export async function fetchPlaylistWithURL(url: string, token: string) {
+export async function fetchSpotifyURL(url: string, token: string) {
   const headers = {
     Authorization: `Bearer ${token}`,
   };

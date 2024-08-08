@@ -12,7 +12,11 @@ export default function SearchPlaylists() {
         <CardTitle className="text-5xl text-stone-950">
           Search Your Playlists
         </CardTitle>
+
         <SearchBar />
+        <CardDescription className="text-md text-stone-950">
+          Select one or more playlists to pick genres from
+        </CardDescription>
         <PlaylistList token={token} />
       </div>
     </Card>
