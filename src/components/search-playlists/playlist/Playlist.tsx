@@ -18,7 +18,6 @@ export default function Playlist({
   selected,
   onSelect,
 }: PlaylistProps) {
-  console.log(playlist);
   return (
     <Card
       style={{ backgroundColor: selected ? Colors.ACCENT : "white" }}
