@@ -21,9 +21,9 @@ export default function SearchPlaylists({ token }: { token: string }) {
         </div>
       </div>
       <div>
-        <Button asChild>
+        {/* <Button asChild>
           <Link href=""
-        </Button>
+        </Button> */}
       </div>
       <PlaylistList token={token} />
     </Card>

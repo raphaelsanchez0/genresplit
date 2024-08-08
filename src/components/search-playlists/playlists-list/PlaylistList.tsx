@@ -2,7 +2,7 @@
 import { fetchSpotifyURL } from "@/utils/api/playlists/playlists";
 import { getSpotifyToken } from "@/utils/authHelpers";
 import Image from "next/image";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import Playlist from "../playlist/Playlist";
 
@@ -11,11 +11,14 @@ export default function PlaylistList({ token }: { token: string }) {
     SpotifyApi.PlaylistObjectSimplified[]
   >([]);
 
-  const [selectedPlaylists, setSelectedPlaylists] = useState<Set<string>>(
-    new Set()
-  );
   const searchParams = useSearchParams();
+  const router = useRouter();
   const query = searchParams.get("q");
+  const selectedPlaylistsParam = searchParams.get("selectedPlaylists");
+
+  const [selectedPlaylists, setSelectedPlaylists] = useState<Set<string>>(
+    new Set(selectedPlaylistsParam ? selectedPlaylistsParam.split(",") : [])
+  );
 
   const toggleSelectedPlaylist = (playlistID: string) => {
     setSelectedPlaylists((prevSelectedPlaylists) => {
@@ -25,6 +28,13 @@ export default function PlaylistList({ token }: { token: string }) {
       } else {
         newSelectedPlaylists.add(playlistID);
       }
+      const newSelectedPlaylistsArray = Array.from(newSelectedPlaylists);
+      const newSearchParams = new URLSearchParams(searchParams.toString());
+      newSearchParams.set(
+        "selectedPlaylists",
+        newSelectedPlaylistsArray.join(",")
+      );
+      router.push(`?${newSearchParams.toString()}`);
       return newSelectedPlaylists;
     });
   };
