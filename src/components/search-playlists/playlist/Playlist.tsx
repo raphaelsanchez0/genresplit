@@ -9,13 +9,21 @@ import React from "react";
 
 interface PlaylistProps {
   selected: boolean;
+  onSelect: () => void;
   playlist: SpotifyApi.PlaylistObjectSimplified;
 }
 
-export default function Playlist({ playlist, selected }: PlaylistProps) {
+export default function Playlist({
+  playlist,
+  selected,
+  onSelect,
+}: PlaylistProps) {
   console.log(playlist);
   return (
-    <Card style={{ backgroundColor: selected ? Colors.ACCENT : "white" }}>
+    <Card
+      style={{ backgroundColor: selected ? Colors.ACCENT : "white" }}
+      onClick={onSelect}
+    >
       <div className="flex p-4">
         {playlist.images && <img src={playlist.images[0].url} width={100} />}
         <CardHeader>

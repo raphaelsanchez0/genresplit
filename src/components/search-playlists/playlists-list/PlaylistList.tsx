@@ -10,8 +10,24 @@ export default function PlaylistList({ token }: { token: string }) {
   const [playlists, setPlaylists] = useState<
     SpotifyApi.PlaylistObjectSimplified[]
   >([]);
+
+  const [selectedPlaylists, setSelectedPlaylists] = useState<Set<string>>(
+    new Set()
+  );
   const searchParams = useSearchParams();
   const query = searchParams.get("q");
+
+  const toggleSelectedPlaylist = (playlistID: string) => {
+    setSelectedPlaylists((prevSelectedPlaylists) => {
+      const newSelectedPlaylists = new Set(prevSelectedPlaylists);
+      if (newSelectedPlaylists.has(playlistID)) {
+        newSelectedPlaylists.delete(playlistID);
+      } else {
+        newSelectedPlaylists.add(playlistID);
+      }
+      return newSelectedPlaylists;
+    });
+  };
 
   useEffect(() => {
     const fetchPlaylists = async () => {
@@ -38,7 +54,12 @@ export default function PlaylistList({ token }: { token: string }) {
   return (
     <div className="grid grid-cols-3 w-full">
       {playlists.map((playlist) => (
-        <Playlist key={playlist.id} playlist={playlist} selected={false} />
+        <Playlist
+          key={playlist.id}
+          playlist={playlist}
+          selected={selectedPlaylists.has(playlist.id)}
+          onSelect={() => toggleSelectedPlaylist(playlist.id)}
+        />
       ))}
     </div>
   );
