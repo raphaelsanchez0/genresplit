@@ -14,7 +14,7 @@ export default function SearchPlaylists({ token }: { token: string }) {
   const atLeastOnePlaylistSelected = !!selectedPlaylistsParam;
 
   const handleSubmit = () => {
-    router.push(`/genres?selectedPlaylists=${selectedPlaylistsParam}`);
+    router.push(`/select-genres?selectedPlaylists=${selectedPlaylistsParam}`);
   };
 
   return (
