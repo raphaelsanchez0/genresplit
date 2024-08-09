@@ -1,4 +1,5 @@
 import { getPlaylistTracks } from "../playlists/playlist";
+import { fetchSpotifyURL } from "../spotify";
 
 export async function getArtistsFrequencyInPlaylists(
   playlists: Set<string>,
@@ -16,4 +17,12 @@ export async function getArtistsFrequencyInPlaylists(
   }
 
   return artistMap;
+}
+
+export async function getArtistsGenres(artistID: string, token: string) {
+  const response: SpotifyApi.SingleArtistResponse = await fetchSpotifyURL(
+    `https://api.spotify.com/v1/artists/${artistID}`,
+    token
+  );
+  return response.genres;
 }
