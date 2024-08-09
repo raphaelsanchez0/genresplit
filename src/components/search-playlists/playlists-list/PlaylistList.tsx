@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useMemo, useState } from "react";
 import Playlist from "../playlist/Playlist";
+import useSearchParamPlaylists from "@/hooks/useSearchParamPlaylists";
 
 export default function PlaylistList({ token }: { token: string }) {
   const [playlists, setPlaylists] = useState<
@@ -15,12 +16,7 @@ export default function PlaylistList({ token }: { token: string }) {
   const router = useRouter();
   const query = searchParams.get("q");
 
-  const selectedPlaylists = useMemo(() => {
-    const selectedPlaylistsParam = searchParams.get("selectedPlaylists");
-    return new Set(
-      selectedPlaylistsParam ? selectedPlaylistsParam.split(",") : []
-    );
-  }, [searchParams]);
+  const selectedPlaylists = useSearchParamPlaylists({ searchParams });
 
   const toggleSelectedPlaylist = (playlistID: string) => {
     const newSelectedPlaylists = new Set(selectedPlaylists);
