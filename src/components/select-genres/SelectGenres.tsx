@@ -13,7 +13,7 @@ export default function SelectGenres({ token }: { token: string }) {
   const [genres, setGenres] = useState<Map<string, number>>(new Map());
 
   useEffect(() => {
-    const getAndSetArtists = async () => {
+    const getArtists = async () => {
       const artistMap = new Map<string, number>();
 
       for await (const playlistID of selectedPlaylists) {
@@ -25,24 +25,14 @@ export default function SelectGenres({ token }: { token: string }) {
           });
         }
       }
+
       setArtists(artistMap);
+      debugger;
+      console.log(artistMap);
     };
 
-    getAndSetArtists();
+    getArtists();
   }, []);
-
-  useEffect(() => {
-    const printArtists = () => {
-      artists.forEach((count, artistID) => {
-        console.log(artistID, count);
-        // You can further process artistID and count to get genres and update the `genres` state.
-      });
-    };
-
-    if (artists.size > 0) {
-      printArtists();
-    }
-  }, [artists]);
 
   return <Card className="full-page-card"></Card>;
 }
