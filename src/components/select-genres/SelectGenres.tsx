@@ -5,6 +5,7 @@ import { Card } from "../ui/card";
 import useSearchParamPlaylists from "@/hooks/useSearchParamPlaylists";
 import { getPlaylistTracks } from "@/utils/api/playlists/playlist";
 import { getArtistsFrequencyInPlaylists } from "@/utils/api/artists/artists";
+import { getGenreFrequencyAmongArtists } from "@/utils/api/genres/genres";
 
 export default function SelectGenres({ token }: { token: string }) {
   const searchParams = useSearchParams();
@@ -19,6 +20,8 @@ export default function SelectGenres({ token }: { token: string }) {
         selectedPlaylists,
         token
       );
+      const genresMap = await getGenreFrequencyAmongArtists(artistMap, token);
+      console.log(genresMap);
     };
 
     getArtists();

@@ -31,7 +31,7 @@ export default function PlaylistList({ token }: { token: string }) {
       "selectedPlaylists",
       newSelectedPlaylistsArray.join(",")
     );
-    router.push(`?${newSearchParams.toString()}`);
+    router.push(`?${newSearchParams.toString()}`, { scroll: false });
   };
 
   useEffect(() => {
