@@ -1,5 +1,5 @@
 "use client";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { Card, CardDescription, CardTitle } from "../ui/card";
 import useSearchParamPlaylists from "@/hooks/useSearchParamPlaylists";
@@ -8,13 +8,30 @@ import { getArtistsFrequencyInPlaylists } from "@/utils/api/artists/artists";
 import { getGenreFrequencyAmongArtists } from "@/utils/api/genres/genres";
 import { GenreFrequency } from "@/utils/types";
 import GenresList from "../genres-list/GenresList";
+import useSearchParamGenres from "@/hooks/useSearchParamGenres";
 
 export default function SelectGenres({ token }: { token: string }) {
   const searchParams = useSearchParams();
   const selectedPlaylists = useSearchParamPlaylists({ searchParams });
+  const router = useRouter();
 
   const [artists, setArtists] = useState<Map<string, number>>(new Map());
   const [sortedGenres, setSortedGenres] = useState<GenreFrequency[]>([]);
+
+  const selectedGenres = useSearchParamGenres(searchParams);
+
+  const toggleSelectedGenres = (genre: string) => {
+    const newSelectedGenres = new Set(selectedGenres);
+    if (newSelectedGenres.has(genre)) {
+      newSelectedGenres.delete(genre);
+    } else {
+      newSelectedGenres.add(genre);
+    }
+    const newSelectedGenresArray = Array.from(newSelectedGenres);
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+    newSearchParams.set("selectedGenres", newSelectedGenresArray.join(","));
+    router.push(`?${newSearchParams.toString()}`, { scroll: false });
+  };
 
   useEffect(() => {
     const getArtists = async () => {
