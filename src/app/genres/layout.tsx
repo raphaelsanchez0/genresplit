@@ -1,7 +1,7 @@
 import NavbarUI from "@/components/navbar/NavbarUI";
 import React from "react";
 
-export default function SearchLayout({
+export default function GenresLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
