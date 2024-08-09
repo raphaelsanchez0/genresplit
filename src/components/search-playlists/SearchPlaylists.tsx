@@ -18,7 +18,7 @@ export default function SearchPlaylists({ token }: { token: string }) {
   };
 
   return (
-    <Card className="h-full w-3/4 flex flex-col">
+    <Card className="full-page-card">
       <div className="grid grid-cols-3">
         <div className="flex flex-col items-center justify-center p-6 gap-4 col-start-2 col-end-3">
           <CardTitle className="text-5xl text-stone-950">

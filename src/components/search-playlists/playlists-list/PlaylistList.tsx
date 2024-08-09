@@ -3,7 +3,7 @@ import { fetchSpotifyURL } from "@/utils/api/playlists/playlists";
 import { getSpotifyToken } from "@/utils/authHelpers";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Playlist from "../playlist/Playlist";
 
 export default function PlaylistList({ token }: { token: string }) {
@@ -14,29 +14,28 @@ export default function PlaylistList({ token }: { token: string }) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const query = searchParams.get("q");
-  const selectedPlaylistsParam = searchParams.get("selectedPlaylists");
 
-  const [selectedPlaylists, setSelectedPlaylists] = useState<Set<string>>(
-    new Set(selectedPlaylistsParam ? selectedPlaylistsParam.split(",") : [])
-  );
+  const selectedPlaylists = useMemo(() => {
+    const selectedPlaylistsParam = searchParams.get("selectedPlaylists");
+    return new Set(
+      selectedPlaylistsParam ? selectedPlaylistsParam.split(",") : []
+    );
+  }, [searchParams]);
 
   const toggleSelectedPlaylist = (playlistID: string) => {
-    setSelectedPlaylists((prevSelectedPlaylists) => {
-      const newSelectedPlaylists = new Set(prevSelectedPlaylists);
-      if (newSelectedPlaylists.has(playlistID)) {
-        newSelectedPlaylists.delete(playlistID);
-      } else {
-        newSelectedPlaylists.add(playlistID);
-      }
-      const newSelectedPlaylistsArray = Array.from(newSelectedPlaylists);
-      const newSearchParams = new URLSearchParams(searchParams.toString());
-      newSearchParams.set(
-        "selectedPlaylists",
-        newSelectedPlaylistsArray.join(",")
-      );
-      router.push(`?${newSearchParams.toString()}`);
-      return newSelectedPlaylists;
-    });
+    const newSelectedPlaylists = new Set(selectedPlaylists);
+    if (newSelectedPlaylists.has(playlistID)) {
+      newSelectedPlaylists.delete(playlistID);
+    } else {
+      newSelectedPlaylists.add(playlistID);
+    }
+    const newSelectedPlaylistsArray = Array.from(newSelectedPlaylists);
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+    newSearchParams.set(
+      "selectedPlaylists",
+      newSelectedPlaylistsArray.join(",")
+    );
+    router.push(`?${newSearchParams.toString()}`);
   };
 
   useEffect(() => {

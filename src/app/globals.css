@@ -12,6 +12,10 @@
   @apply bg-white flex-grow flex-shrink basis-auto flex justify-center;
 }
 
+.full-page-card {
+  @apply h-full w-3/4 flex flex-col;
+}
+
 @layer base {
   h1 {
     @apply text-4xl font-bold leading-tight text-gray-800;
