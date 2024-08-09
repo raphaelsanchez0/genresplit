@@ -5,8 +5,18 @@ import SearchBar from "./search-bar/SearchBar";
 import PlaylistList from "./playlists-list/PlaylistList";
 import { getSpotifyToken } from "@/utils/authHelpers";
 import { Button } from "../ui/button";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function SearchPlaylists({ token }: { token: string }) {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const selectedPlaylistsParam = searchParams.get("selectedPlaylists");
+  const atLeastOnePlaylistSelected = !!selectedPlaylistsParam;
+
+  const handleSubmit = () => {
+    router.push(`/genres?selectedPlaylists=${selectedPlaylistsParam}`);
+  };
+
   return (
     <Card className="h-full w-3/4 flex flex-col">
       <div className="grid grid-cols-3">
@@ -19,12 +29,13 @@ export default function SearchPlaylists({ token }: { token: string }) {
             Select one or more playlists to pick genres from
           </CardDescription>
         </div>
+        <div className="flex items-center justify-center">
+          <Button disabled={!atLeastOnePlaylistSelected} onClick={handleSubmit}>
+            Get Genres
+          </Button>
+        </div>
       </div>
-      <div>
-        {/* <Button asChild>
-          <Link href=""
-        </Button> */}
-      </div>
+
       <PlaylistList token={token} />
     </Card>
   );
