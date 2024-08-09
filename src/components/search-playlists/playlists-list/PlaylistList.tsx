@@ -1,5 +1,5 @@
 "use client";
-import { fetchSpotifyURL } from "@/utils/api/playlists/playlists";
+import { fetchSpotifyURL } from "@/utils/api/spotify";
 import { getSpotifyToken } from "@/utils/authHelpers";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
