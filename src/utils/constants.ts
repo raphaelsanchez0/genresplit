@@ -1,5 +1,4 @@
 const spotifyClientSecret = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_SECRET;
-debugger;
 if (!spotifyClientSecret) {
   throw new Error("No client Secret environment variable");
 }
