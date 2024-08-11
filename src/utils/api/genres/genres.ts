@@ -1,4 +1,4 @@
-import { getArtistsGenres } from "../artists/artists";
+import { getArtistGenres } from "../artists/artists";
 
 export async function getGenreFrequencyAmongArtists(
   artistMap: Map<string, number>,
@@ -6,7 +6,7 @@ export async function getGenreFrequencyAmongArtists(
 ) {
   const genresMap = new Map<string, number>();
   for await (const [artistID, artistFrequency] of artistMap.entries()) {
-    const genres = await getArtistsGenres(artistID, token);
+    const genres = await getArtistGenres(artistID, token);
     for await (const genre of genres) {
       const currentCount = genresMap.get(genre) || 0;
       genresMap.set(genre, currentCount + artistFrequency);

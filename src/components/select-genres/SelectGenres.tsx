@@ -3,10 +3,16 @@ import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { Card, CardDescription, CardTitle } from "../ui/card";
 import useSearchParamPlaylists from "@/hooks/useSearchParamPlaylists";
-import { getPlaylistTracks } from "@/utils/api/playlists/playlist";
-import { getArtistsFrequencyInPlaylists } from "@/utils/api/artists/artists";
+import {
+  getPlaylistTracks,
+  getPlaylistTracksTracksInPlaylists,
+} from "@/utils/api/playlists/playlist";
+import {
+  getArtistGenres,
+  getArtistsFrequencyInPlaylists,
+} from "@/utils/api/artists/artists";
 import { getGenreFrequencyAmongArtists } from "@/utils/api/genres/genres";
-import { GenreFrequency } from "@/utils/types";
+import { GenreFrequency, PlaylistTrackObjectWithGenres } from "@/utils/types";
 import GenresList from "../genres-list/GenresList";
 import useSearchParamGenres from "@/hooks/useSearchParamGenres";
 
@@ -35,16 +41,44 @@ export default function SelectGenres({ token }: { token: string }) {
 
   useEffect(() => {
     const getArtists = async () => {
-      const artistMap = await getArtistsFrequencyInPlaylists(
+      //Key: artistID, Value: Genres[]
+      const artistGenres = new Map<string, string[]>();
+      const genreCount = new Map<string, number>();
+      const allTracksWithGenres = new Set<PlaylistTrackObjectWithGenres>();
+
+      //get all tracks from selected playlists and put them in a set.
+      const allTracksWithoutGenres = await getPlaylistTracksTracksInPlaylists(
         selectedPlaylists,
         token
       );
-      const genresMap = await getGenreFrequencyAmongArtists(artistMap, token);
-      const sortedGenresArray: GenreFrequency[] = Array.from(genresMap)
+
+      for await (const track of allTracksWithoutGenres) {
+        const artistID = track.track?.artists[0]?.id!;
+        let genres: string[] | undefined = artistGenres.get(artistID);
+        if (!genres) {
+          genres = await getArtistGenres(artistID, token);
+          artistGenres.set(artistID, genres);
+        }
+
+        for (const genre of genres) {
+          const currentCount = genreCount.get(genre) || 0;
+          genreCount.set(genre, currentCount + 1);
+        }
+
+        allTracksWithGenres.add({
+          ...track,
+          genres: genres,
+        });
+      }
+
+      const genresArray = Array.from(genreCount);
+      const sortedGenresArray: GenreFrequency[] = genresArray
         .sort((a, b) => b[1] - a[1])
         .map(([genre, frequency]) => ({ genre, frequency }));
-      setSortedGenres(sortedGenresArray);
+
       console.log(sortedGenresArray);
+
+      setSortedGenres(sortedGenresArray);
     };
 
     getArtists();

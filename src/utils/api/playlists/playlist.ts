@@ -23,3 +23,18 @@ export async function getPlaylistTracks(
 
   return tracks;
 }
+
+export async function getPlaylistTracksTracksInPlaylists(
+  playlists: Set<string>,
+  token: string
+) {
+  let allTracks = new Set<SpotifyApi.PlaylistTrackObject>();
+  for await (const playlistID of playlists) {
+    const tracksInPlaylist = await getPlaylistTracks(playlistID, token);
+    const tracksArray = Array.from(tracksInPlaylist);
+    for (const track of tracksArray) {
+      allTracks.add(track);
+    }
+  }
+  return allTracks
+}
