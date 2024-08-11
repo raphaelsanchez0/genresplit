@@ -26,27 +26,13 @@ export default function SelectGenres({ token }: { token: string }) {
 
   const selectedGenres = useSearchParamGenres(searchParams);
 
-  const toggleSelectedGenres = (genre: string) => {
-    const newSelectedGenres = new Set(selectedGenres);
-    if (newSelectedGenres.has(genre)) {
-      newSelectedGenres.delete(genre);
-    } else {
-      newSelectedGenres.add(genre);
-    }
-    const newSelectedGenresArray = Array.from(newSelectedGenres);
-    const newSearchParams = new URLSearchParams(searchParams.toString());
-    newSearchParams.set("selectedGenres", newSelectedGenresArray.join(","));
-    router.push(`?${newSearchParams.toString()}`, { scroll: false });
-  };
-
   useEffect(() => {
-    const getArtists = async () => {
+    const addGenresToTracks = async () => {
       //Key: artistID, Value: Genres[]
       const artistGenres = new Map<string, string[]>();
       const genreCount = new Map<string, number>();
       const allTracksWithGenres = new Set<PlaylistTrackObjectWithGenres>();
 
-      //get all tracks from selected playlists and put them in a set.
       const allTracksWithoutGenres = await getPlaylistTracksTracksInPlaylists(
         selectedPlaylists,
         token
@@ -81,7 +67,7 @@ export default function SelectGenres({ token }: { token: string }) {
       setSortedGenres(sortedGenresArray);
     };
 
-    getArtists();
+    addGenresToTracks();
   }, []);
   return (
     <Card className="full-page-card">
