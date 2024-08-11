@@ -36,5 +36,33 @@ export async function getPlaylistTracksTracksInPlaylists(
       allTracks.add(track);
     }
   }
-  return allTracks
+  return allTracks;
+}
+
+export async function createPlaylist(
+  userID: string,
+  name: string,
+  description: string,
+  isPublic: boolean,
+  token: string
+) {
+  const url = "https://api.spotify.com/v1/users/abccool2020/playlists";
+  const headers = {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json",
+  };
+  const response = await fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify({
+      name: name,
+      description: description,
+      public: isPublic,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP Error, Status ${response.status}`);
+  }
+  return response.json();
 }

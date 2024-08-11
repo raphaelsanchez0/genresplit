@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Card, CardDescription, CardTitle } from "../ui/card";
 import useSearchParamPlaylists from "@/hooks/useSearchParamPlaylists";
 import {
+  createPlaylist,
   getPlaylistTracks,
   getPlaylistTracksTracksInPlaylists,
 } from "@/utils/api/playlists/playlist";
@@ -17,6 +18,7 @@ import GenresList from "./genres-list/GenresList";
 import useSearchParamGenres from "@/hooks/useSearchParamGenres";
 import { Button } from "../ui/button";
 import useSortedGenres from "./useSortedGenres";
+import { getAuthenticatedUserID } from "@/utils/api/user/user";
 
 export default function SelectGenres({ token }: { token: string }) {
   const searchParams = useSearchParams();
@@ -26,8 +28,9 @@ export default function SelectGenres({ token }: { token: string }) {
 
   const selectedGenresParam = searchParams.get("selectedGenres");
   const atLeastOneGenreSelected = !!selectedGenresParam;
-  const handleSubmit = () => {
-    console.log(sortedGenres);
+  const handleSubmit = async () => {
+    const userID = await getAuthenticatedUserID(token);
+    createPlaylist(userID, "test playlist", "test description", true, token);
   };
   return (
     <Card className="full-page-card">
