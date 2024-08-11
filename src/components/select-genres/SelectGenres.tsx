@@ -13,7 +13,7 @@ import {
 } from "@/utils/api/artists/artists";
 import { getGenreFrequencyAmongArtists } from "@/utils/api/genres/genres";
 import { GenreFrequency, PlaylistTrackObjectWithGenres } from "@/utils/types";
-import GenresList from "../genres-list/GenresList";
+import GenresList from "./genres-list/GenresList";
 import useSearchParamGenres from "@/hooks/useSearchParamGenres";
 
 export default function SelectGenres({ token }: { token: string }) {
