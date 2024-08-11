@@ -1,6 +1,7 @@
 import useSearchParamGenres from "@/hooks/useSearchParamGenres";
 import { GenreFrequency } from "@/utils/types";
 import { useRouter, useSearchParams } from "next/navigation";
+import Genre from "../genre/Genre";
 
 export default function GenresList({
   token,
@@ -29,13 +30,12 @@ export default function GenresList({
   return (
     <div className="grid grid-cols-3 gap-4 p-4">
       {genres.map((genre) => (
-        <div
+        <Genre
           key={genre.genre}
-          className="flex items-center justify-between p-4 border border-stone-200 rounded-lg"
-        >
-          <p className="text-stone-950">{genre.genre}</p>
-          <p className="text-stone-950">{genre.frequency}</p>
-        </div>
+          {...genre}
+          onSelect={toggleSelectedGenres}
+          selected={selectedGenres.has(genre.genre)}
+        />
       ))}
     </div>
   );
