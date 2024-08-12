@@ -1,3 +1,4 @@
+import PlaylistInfo from "@/components/playlist/playlist-info/PlaylistInfo";
 import React from "react";
 
 interface PlaylistProps {
@@ -7,6 +8,9 @@ interface PlaylistProps {
 }
 
 export default function Playlist({ params: { id } }: PlaylistProps) {
-  console.log(id);
-  return <div>{id}</div>;
+  return (
+    <div className="page">
+      <PlaylistInfo id={id} />
+    </div>
+  );
 }
