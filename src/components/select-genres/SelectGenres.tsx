@@ -70,9 +70,7 @@ export default function SelectGenres({ token }: { token: string }) {
       token
     );
 
-    if (addSongsToPlaylistResponse.ok) {
-      router.push(`/playlist/${newPlaylistResponse.id}`);
-    }
+    router.push(`/playlist/${newPlaylistResponse.id}`);
   };
   return (
     <Card className="full-page-card">
