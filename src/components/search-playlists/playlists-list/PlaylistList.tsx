@@ -6,11 +6,13 @@ import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useMemo, useState } from "react";
 import Playlist from "../playlist/Playlist";
 import useSearchParamPlaylists from "@/hooks/useSearchParamPlaylists";
+import LoadingCard from "@/components/loading-card/LoadingCard";
 
 export default function PlaylistList({ token }: { token: string }) {
   const [playlists, setPlaylists] = useState<
     SpotifyApi.PlaylistObjectSimplified[]
   >([]);
+  const [loading, setLoading] = useState(false);
 
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -36,6 +38,7 @@ export default function PlaylistList({ token }: { token: string }) {
 
   useEffect(() => {
     const fetchPlaylists = async () => {
+      setLoading(true);
       if (query) {
         const playlists: SpotifyApi.PlaylistSearchResponse =
           await fetchSpotifyURL(
@@ -51,10 +54,13 @@ export default function PlaylistList({ token }: { token: string }) {
           );
         setPlaylists(playlists.items);
       }
+      setLoading(false);
     };
 
     fetchPlaylists();
   }, [query]);
+
+  if (loading) return <LoadingCard />;
 
   return (
     <div className="grid grid-cols-3 w-full">

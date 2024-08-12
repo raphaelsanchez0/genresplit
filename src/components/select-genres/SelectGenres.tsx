@@ -1,54 +1,102 @@
 "use client";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { Card, CardDescription, CardTitle } from "../ui/card";
 import useSearchParamPlaylists from "@/hooks/useSearchParamPlaylists";
-import { getPlaylistTracks } from "@/utils/api/playlists/playlist";
-import { getArtistsFrequencyInPlaylists } from "@/utils/api/artists/artists";
-import { getGenreFrequencyAmongArtists } from "@/utils/api/genres/genres";
-import { GenreFrequency } from "@/utils/types";
-import GenresList from "../genres-list/GenresList";
+import {
+  addSongsToPlaylist,
+  createPlaylist,
+  createPlaylistFromGenres,
+  getPlaylistTracks,
+  getPlaylistTracksTracksInPlaylists,
+} from "@/utils/api/playlists/playlist";
+import {
+  getArtistGenres,
+  getArtistsFrequencyInPlaylists,
+} from "@/utils/api/artists/artists";
+import GenresList from "./genres-list/GenresList";
 import useSearchParamGenres from "@/hooks/useSearchParamGenres";
+import { Button } from "../ui/button";
+import useSortedGenres from "./useSortedGenres";
+import { getAuthenticatedUserID } from "@/utils/api/user/user";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTrigger,
+  DialogDescription,
+  DialogFooter,
+} from "../ui/dialog";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form";
+import { Textarea } from "../ui/textarea";
+import { Skeleton } from "../ui/skeleton";
+import LoadingCard from "../loading-card/LoadingCard";
+import PlaylistDetailsDialog, {
+  playlistDetailsFormSchema,
+} from "./playlist-details-dialog/PlaylistDetailsDialog";
+import { useToast } from "../ui/use-toast";
 
 export default function SelectGenres({ token }: { token: string }) {
   const searchParams = useSearchParams();
-  const selectedPlaylists = useSearchParamPlaylists({ searchParams });
   const router = useRouter();
+  const { toast } = useToast();
+  const selectedPlaylists = useSearchParamPlaylists({ searchParams });
+  const [namePlaylistDialogOpen, setNamePlaylistDialogOpen] = useState(false);
 
-  const [artists, setArtists] = useState<Map<string, number>>(new Map());
-  const [sortedGenres, setSortedGenres] = useState<GenreFrequency[]>([]);
+  const { sortedGenres, allTracksWithGenres, loading } = useSortedGenres(
+    selectedPlaylists,
+    token
+  );
 
-  const selectedGenres = useSearchParamGenres(searchParams);
+  const selectedGenresParam = searchParams.get("selectedGenres");
+  const atLeastOneGenreSelected = !!selectedGenresParam;
 
-  const toggleSelectedGenres = (genre: string) => {
-    const newSelectedGenres = new Set(selectedGenres);
-    if (newSelectedGenres.has(genre)) {
-      newSelectedGenres.delete(genre);
-    } else {
-      newSelectedGenres.add(genre);
-    }
-    const newSelectedGenresArray = Array.from(newSelectedGenres);
-    const newSearchParams = new URLSearchParams(searchParams.toString());
-    newSearchParams.set("selectedGenres", newSelectedGenresArray.join(","));
-    router.push(`?${newSearchParams.toString()}`, { scroll: false });
+  const onSubmit = async (
+    values: z.infer<typeof playlistDetailsFormSchema>
+  ) => {
+    const userID = await getAuthenticatedUserID(token);
+    const selectedGenres = new Set(selectedGenresParam!.split(",") || []);
+
+    let newPlaylistTrackURIs: string[] = [];
+
+    allTracksWithGenres.forEach((track) => {
+      if (track.genres.some((genre) => selectedGenres.has(genre))) {
+        newPlaylistTrackURIs.push(track.track?.uri!);
+      }
+    });
+
+    const newPlaylistName = values.newPlaylistName || "GenreSplit Playlist";
+    const newPlaylistResponse = await createPlaylist(
+      userID,
+      newPlaylistName,
+      values.newPlaylistDescription || "",
+      true,
+      token
+    );
+
+    const addSongsToPlaylistResponse = await addSongsToPlaylist(
+      newPlaylistResponse.id,
+      newPlaylistTrackURIs,
+      token
+    );
+
+    router.push(`/playlist/${newPlaylistResponse.id}`);
   };
 
-  useEffect(() => {
-    const getArtists = async () => {
-      const artistMap = await getArtistsFrequencyInPlaylists(
-        selectedPlaylists,
-        token
-      );
-      const genresMap = await getGenreFrequencyAmongArtists(artistMap, token);
-      const sortedGenresArray: GenreFrequency[] = Array.from(genresMap)
-        .sort((a, b) => b[1] - a[1])
-        .map(([genre, frequency]) => ({ genre, frequency }));
-      setSortedGenres(sortedGenresArray);
-      console.log(sortedGenresArray);
-    };
-
-    getArtists();
-  }, []);
+  if (loading) return <LoadingCard hasHeaderSkeleton />;
   return (
     <Card className="full-page-card">
       <div className="grid grid-cols-3">
@@ -59,6 +107,14 @@ export default function SelectGenres({ token }: { token: string }) {
           <CardDescription className="text-md text-stone-950 text-center">
             Select the genres you want to include in your new playlist
           </CardDescription>
+        </div>
+        <div className="flex items-center justify-center">
+          <PlaylistDetailsDialog
+            namePlaylistDialogOpen={namePlaylistDialogOpen}
+            setNamePlaylistDialogOpen={setNamePlaylistDialogOpen}
+            atLeastOneGenreSelected={atLeastOneGenreSelected}
+            onSubmit={onSubmit}
+          />
         </div>
       </div>
       <GenresList genres={sortedGenres} token={token} />

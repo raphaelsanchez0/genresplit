@@ -8,7 +8,6 @@ const pathToRouteOnToSuccessfulAuth = "/search";
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const { searchParams, origin } = new URL(request.url);
-  console.log(url);
   const code = searchParams.get("code");
   const next = searchParams.get("next") ?? "/";
 

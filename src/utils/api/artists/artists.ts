@@ -19,7 +19,7 @@ export async function getArtistsFrequencyInPlaylists(
   return artistMap;
 }
 
-export async function getArtistsGenres(artistID: string, token: string) {
+export async function getArtistGenres(artistID: string, token: string) {
   const response: SpotifyApi.SingleArtistResponse = await fetchSpotifyURL(
     `https://api.spotify.com/v1/artists/${artistID}`,
     token
