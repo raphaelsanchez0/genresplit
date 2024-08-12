@@ -2,6 +2,7 @@ import { Card } from "@/components/ui/card";
 import { fetchSpotifyURL } from "@/utils/api/spotify";
 import React from "react";
 import Image from "next/image";
+import Track from "../track/Track";
 
 interface PlaylistInfoProps {
   id: string;
@@ -13,35 +14,41 @@ export default async function PlaylistInfo({ id, token }: PlaylistInfoProps) {
     `https://api.spotify.com/v1/playlists/${id}`,
     token
   );
+
+  const playlistID = playlist.id;
+  const playlistTracks: SpotifyApi.PlaylistTrackResponse =
+    await fetchSpotifyURL(
+      `https://api.spotify.com/v1/playlists/${playlistID}/tracks`,
+      token
+    );
   return (
     <Card className="full-page-card">
-      <div className="flex-1 flex flex-row p-4">
-        <Card className="basis-1/3 p-4">
-          <div className="flex flex-col items-center">
-            {/* <Image
-              src={playlist.images[0].url}
-              alt={`${playlist.name} Playlist Cover Image`}
-              width={300}
-              height={300}
-            /> */}
+      <div className="flex-1 flex flex-col p-4">
+        <Card className="basis-1/4 p-4">
+          <div className="flex flex-row gap-4">
             <div className="rounded-md overflow-hidden border">
               <img
                 src={playlist.images[0].url}
                 alt={`${playlist.name} Playlist Cover Image`}
-                width={300}
-                height={300}
+                width={200}
+                height={200}
               />
             </div>
-            <div>
+            <div className="flex flex-col justify-center">
               <h1 className="text-4xl font-bold">{playlist.name}</h1>
-              <p className="text-md text-stone-950">{playlist.description}</p>
-              <p className="text-md text-stone-950">
+              <p className="text-md text-gray-600">{playlist.description}</p>
+              <p className="text-sm text-gray-600">
                 {playlist.tracks.total} tracks
               </p>
             </div>
           </div>
         </Card>
-        <div className="basis-2/3"></div>
+        <div className="basis-3/4 p-4">
+          <h2 className="text-2xl font-bold">Tracks</h2>
+          {playlistTracks.items.map((track) => (
+            <Track track={track} />
+          ))}
+        </div>
       </div>
     </Card>
   );
