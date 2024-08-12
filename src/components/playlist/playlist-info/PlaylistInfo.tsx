@@ -3,6 +3,7 @@ import { fetchSpotifyURL } from "@/utils/api/spotify";
 import React from "react";
 import Image from "next/image";
 import Track from "../track/Track";
+import { ExternalLink } from "lucide-react";
 
 interface PlaylistInfoProps {
   id: string;
@@ -35,7 +36,12 @@ export default async function PlaylistInfo({ id, token }: PlaylistInfoProps) {
               />
             </div>
             <div className="flex flex-col justify-center">
-              <h1 className="text-4xl font-bold">{playlist.name}</h1>
+              <div className="flex items-center gap-2">
+                <h1 className="text-4xl font-bold">{playlist.name}</h1>
+                <a href={playlist.external_urls.spotify} target="_blank">
+                  <ExternalLink className="w-6 h-6 text-gray-600" />
+                </a>
+              </div>
               <p className="text-md text-gray-600">{playlist.description}</p>
               <p className="text-sm text-gray-600">
                 {playlist.tracks.total} tracks
