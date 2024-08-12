@@ -13,7 +13,6 @@ const defaultShowDialog = true;
 export function createAuthURL(
   authEndpoint: string = spotify.AUTH_ENDPOINT,
   clientID: string = spotify.CLIENT_ID,
-  clientSecret: string = spotify.CLIENT_SECRET,
   redirectURI: string = spotify.REDIRECT_URI,
   responseType: string = defaultResponseType,
   scopes: string = spotify.SCOPES,
