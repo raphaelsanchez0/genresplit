@@ -10,15 +10,19 @@ import {
 const defaultResponseType = "code";
 const defaultShowDialog = true;
 
+export function getRedirectURI() {
+  return process.env.NEXT_PUBLIC_REDIRECT_URI!;
+}
+
 export function createAuthURL(
   authEndpoint: string = spotify.AUTH_ENDPOINT,
   clientID: string = spotify.CLIENT_ID,
-  redirectURI: string = spotify.REDIRECT_URI,
   responseType: string = defaultResponseType,
   scopes: string = spotify.SCOPES,
   showDialog = defaultShowDialog
 ) {
-  return `${authEndpoint}?client_id=${clientID}&redirect_uri=${redirectURI}&response_type=${responseType}&scope=${scopes}&show_dialog=${showDialog}`;
+  console.log(getRedirectURI());
+  return `${authEndpoint}?client_id=${clientID}&redirect_uri=${getRedirectURI()}&response_type=${responseType}&scope=${scopes}&show_dialog=${showDialog}`;
 }
 
 export async function exchangeCodeForToken(code: string): Promise<any> {
@@ -35,7 +39,7 @@ export async function exchangeCodeForToken(code: string): Promise<any> {
     body: new URLSearchParams({
       grant_type: "authorization_code",
       code: code,
-      redirect_uri: spotify.REDIRECT_URI,
+      redirect_uri: getRedirectURI(),
     }),
   });
 

@@ -15,9 +15,12 @@ export const spotify = {
     "user-read-email",
     "playlist-read-collaborative",
   ].join(" "),
-  REDIRECT_URI: "http://localhost:3000/auth/callback/",
-  BASE_URL: "https://api.spotify.com/v1",
+  redirectURIs: {
+    PRODUCTION: "http://localhost:3000/auth/callback/",
+    DEVELOPMENT: "https://genresplit.vercel.app/auth/callback/",
+  },
 
+  BASE_URL: "https://api.spotify.com/v1",
   TOKEN_ENDPOINT: "https://accounts.spotify.com/api/token",
 };
 
