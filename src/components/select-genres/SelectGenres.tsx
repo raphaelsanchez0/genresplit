@@ -41,6 +41,8 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Textarea } from "../ui/textarea";
+import { Skeleton } from "../ui/skeleton";
+import LoadingCard from "../loading-card/LoadingCard";
 
 export default function SelectGenres({ token }: { token: string }) {
   const searchParams = useSearchParams();
@@ -58,7 +60,7 @@ export default function SelectGenres({ token }: { token: string }) {
     },
   });
 
-  const { sortedGenres, allTracksWithGenres } = useSortedGenres(
+  const { sortedGenres, allTracksWithGenres, loading } = useSortedGenres(
     selectedPlaylists,
     token
   );
@@ -97,6 +99,8 @@ export default function SelectGenres({ token }: { token: string }) {
 
     router.push(`/playlist/${newPlaylistResponse.id}`);
   };
+
+  if (loading) return <LoadingCard />;
   return (
     <Card className="full-page-card">
       <div className="grid grid-cols-3">
