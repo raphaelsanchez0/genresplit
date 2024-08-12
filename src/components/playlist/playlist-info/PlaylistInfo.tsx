@@ -4,6 +4,7 @@ import React from "react";
 import Image from "next/image";
 import Track from "../track/Track";
 import { ExternalLink } from "lucide-react";
+import NavigationButtons from "./navigation-buttons/NavigationButtons";
 
 interface PlaylistInfoProps {
   id: string;
@@ -26,6 +27,7 @@ export default async function PlaylistInfo({ id, token }: PlaylistInfoProps) {
     <Card className="full-page-card">
       <div className="flex-1 flex flex-col p-4">
         <Card className="basis-1/4 p-4">
+          <NavigationButtons />
           <div className="flex flex-row gap-4">
             <div className="rounded-md overflow-hidden border">
               <img
