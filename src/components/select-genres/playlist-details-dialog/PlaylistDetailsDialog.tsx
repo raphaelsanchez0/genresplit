@@ -64,8 +64,8 @@ export default function PlaylistDetailsDialog({
           >
             <DialogHeader className="font-semibold">Add Details</DialogHeader>
             <DialogDescription>
-              Optionally name your playlist. If you don't name it, it will be
-              called "GenreSplit Playlist"
+              {`Optionally name your playlist. If you don't name it, it will be
+              called "GenreSplit Playlist".`}
             </DialogDescription>
             <FormField
               control={playlistDetailsForm.control}

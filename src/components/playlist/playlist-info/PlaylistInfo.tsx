@@ -54,7 +54,7 @@ export default async function PlaylistInfo({ id, token }: PlaylistInfoProps) {
         <div className="basis-3/4 p-4">
           <h2 className="text-2xl font-bold">Tracks</h2>
           {playlistTracks.items.map((track) => (
-            <Track track={track} />
+            <Track track={track} key={track?.track?.id} />
           ))}
         </div>
       </div>
