@@ -28,13 +28,35 @@ import {
 } from "../ui/dialog";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form";
+import { Textarea } from "../ui/textarea";
 
 export default function SelectGenres({ token }: { token: string }) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const selectedPlaylists = useSearchParamPlaylists({ searchParams });
-  const [newPlaylistNameInput, setNewPlaylistNameInput] = useState("");
   const [namePlaylistDialogOpen, setNamePlaylistDialogOpen] = useState(false);
+
+  const playlistDetailsForm = useForm<
+    z.infer<typeof playlistDetailsFormSchema>
+  >({
+    resolver: zodResolver(playlistDetailsFormSchema),
+    defaultValues: {
+      newPlaylistName: "",
+      newPlaylistDescription: "",
+    },
+  });
 
   const { sortedGenres, allTracksWithGenres } = useSortedGenres(
     selectedPlaylists,
@@ -44,7 +66,10 @@ export default function SelectGenres({ token }: { token: string }) {
   const selectedGenresParam = searchParams.get("selectedGenres");
 
   const atLeastOneGenreSelected = !!selectedGenresParam;
-  const handleSubmit = async () => {
+
+  const onSubmit = async (
+    values: z.infer<typeof playlistDetailsFormSchema>
+  ) => {
     const userID = await getAuthenticatedUserID(token);
 
     let newPlaylistTrackURIs: string[] = [];
@@ -55,11 +80,11 @@ export default function SelectGenres({ token }: { token: string }) {
       }
     });
 
-    const newPlaylistName = newPlaylistNameInput || "GenreSplit Playlist";
+    const newPlaylistName = values.newPlaylistName || "GenreSplit Playlist";
     const newPlaylistResponse = await createPlaylist(
       userID,
       newPlaylistName,
-      "test",
+      values.newPlaylistDescription || "",
       true,
       token
     );
@@ -94,30 +119,52 @@ export default function SelectGenres({ token }: { token: string }) {
               </Button>
             </DialogTrigger>
             <DialogContent>
-              <DialogHeader>Name your Playlist</DialogHeader>
-              <DialogDescription>
-                Optionally name your playlist. If you don't name it, it will be
-                called "GenreSplit Playlist"
-              </DialogDescription>
-              <div className="flex gap-4 items-center">
-                <Label
-                  htmlFor="playlist-name"
-                  className="text-right whitespace-nowrap"
+              <Form {...playlistDetailsForm}>
+                <form
+                  onSubmit={playlistDetailsForm.handleSubmit(onSubmit)}
+                  className="flex flex-col gap-4"
                 >
-                  Playlist Name
-                </Label>
-                <Input
-                  id="playlist-name"
-                  placeholder="GenreSplit Playlist"
-                  value={newPlaylistNameInput}
-                  onChange={(e) => setNewPlaylistNameInput(e.target.value)}
-                />
-              </div>
-              <DialogFooter>
-                <Button onClick={handleSubmit} type="submit">
-                  Create Playlist
-                </Button>
-              </DialogFooter>
+                  <DialogHeader className="font-semibold">
+                    Add Details
+                  </DialogHeader>
+                  <DialogDescription>
+                    Optionally name your playlist. If you don't name it, it will
+                    be called "GenreSplit Playlist"
+                  </DialogDescription>
+                  <FormField
+                    control={playlistDetailsForm.control}
+                    name="newPlaylistName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Title</FormLabel>
+                        <FormControl>
+                          <Input placeholder="GenreSplit Playlist" {...field} />
+                        </FormControl>
+                        <FormMessage {...field} />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={playlistDetailsForm.control}
+                    name="newPlaylistDescription"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Description</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            placeholder="This playlist was is based on..."
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage {...field} />
+                      </FormItem>
+                    )}
+                  />
+                  <DialogFooter>
+                    <Button type="submit">Create Playlist</Button>
+                  </DialogFooter>
+                </form>
+              </Form>
             </DialogContent>
           </Dialog>
         </div>
@@ -126,3 +173,8 @@ export default function SelectGenres({ token }: { token: string }) {
     </Card>
   );
 }
+
+const playlistDetailsFormSchema = z.object({
+  newPlaylistName: z.string().max(100).optional(),
+  newPlaylistDescription: z.string().max(300).optional(),
+});
