@@ -1,3 +1,4 @@
+import { PlaylistTrackObjectWithGenres } from "@/utils/types";
 import { createPostRequestHeaders, fetchSpotifyURL } from "../spotify";
 
 export async function getPlaylistTracks(
@@ -89,7 +90,41 @@ export async function addSongsToPlaylist(
   if (!response.ok) {
     throw new Error(`Error adding songs to playlist: ${response.status}`);
   }
+  console.log(response);
 
-  const data = await response.json();
+  const data: SpotifyApi.AddTracksToPlaylistResponse = await response.json();
   return data;
+}
+
+export async function createPlaylistFromGenres(
+  selectedGenres: Set<string>,
+  allTracksWithGenres: Set<PlaylistTrackObjectWithGenres>,
+  userID: string,
+  newPlaylistName: string | undefined,
+  newPlaylistDescription: string | undefined,
+  token: string,
+  isPublic: boolean = true
+) {
+  let newPlaylistTrackURIs: string[] = [];
+
+  allTracksWithGenres.forEach((track) => {
+    if (track.genres.some((genre) => selectedGenres.has(genre))) {
+      newPlaylistTrackURIs.push(track.track?.uri!);
+    }
+  });
+  const newPlaylistResponse = await createPlaylist(
+    userID,
+    newPlaylistName || "GenreSplit Playlist",
+    newPlaylistDescription || "",
+    isPublic,
+    token
+  );
+
+  const addSongsToPlaylistResponse = await addSongsToPlaylist(
+    newPlaylistResponse.id,
+    newPlaylistTrackURIs,
+    token
+  );
+
+  return addSongsToPlaylistResponse;
 }

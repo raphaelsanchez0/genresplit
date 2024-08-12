@@ -1,11 +1,12 @@
 "use client";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { Card, CardDescription, CardTitle } from "../ui/card";
 import useSearchParamPlaylists from "@/hooks/useSearchParamPlaylists";
 import {
   addSongsToPlaylist,
   createPlaylist,
+  createPlaylistFromGenres,
   getPlaylistTracks,
   getPlaylistTracksTracksInPlaylists,
 } from "@/utils/api/playlists/playlist";
@@ -43,22 +44,17 @@ import {
 import { Textarea } from "../ui/textarea";
 import { Skeleton } from "../ui/skeleton";
 import LoadingCard from "../loading-card/LoadingCard";
+import PlaylistDetailsDialog, {
+  playlistDetailsFormSchema,
+} from "./playlist-details-dialog/PlaylistDetailsDialog";
+import { useToast } from "../ui/use-toast";
 
 export default function SelectGenres({ token }: { token: string }) {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const { toast } = useToast();
   const selectedPlaylists = useSearchParamPlaylists({ searchParams });
   const [namePlaylistDialogOpen, setNamePlaylistDialogOpen] = useState(false);
-
-  const playlistDetailsForm = useForm<
-    z.infer<typeof playlistDetailsFormSchema>
-  >({
-    resolver: zodResolver(playlistDetailsFormSchema),
-    defaultValues: {
-      newPlaylistName: "",
-      newPlaylistDescription: "",
-    },
-  });
 
   const { sortedGenres, allTracksWithGenres, loading } = useSortedGenres(
     selectedPlaylists,
@@ -66,38 +62,33 @@ export default function SelectGenres({ token }: { token: string }) {
   );
 
   const selectedGenresParam = searchParams.get("selectedGenres");
-
   const atLeastOneGenreSelected = !!selectedGenresParam;
 
   const onSubmit = async (
     values: z.infer<typeof playlistDetailsFormSchema>
   ) => {
     const userID = await getAuthenticatedUserID(token);
-
-    let newPlaylistTrackURIs: string[] = [];
     const selectedGenres = new Set(selectedGenresParam!.split(",") || []);
-    allTracksWithGenres.forEach((track) => {
-      if (track.genres.some((genre) => selectedGenres.has(genre))) {
-        newPlaylistTrackURIs.push(track.track?.uri!);
-      }
-    });
-
-    const newPlaylistName = values.newPlaylistName || "GenreSplit Playlist";
-    const newPlaylistResponse = await createPlaylist(
+    const newPlaylistResponse = await createPlaylistFromGenres(
+      selectedGenres,
+      allTracksWithGenres,
       userID,
-      newPlaylistName,
-      values.newPlaylistDescription || "",
-      true,
+      values.newPlaylistName,
+      values.newPlaylistDescription,
       token
     );
 
-    const addSongsToPlaylistResponse = await addSongsToPlaylist(
-      newPlaylistResponse.id,
-      newPlaylistTrackURIs,
-      token
-    );
+    if (newPlaylistResponse.error) {
+      toast({
+        title: "Error creating playlist",
+        description: `${newPlaylistResponse.error}`,
+      });
+      return;
+    }
 
-    router.push(`/playlist/${newPlaylistResponse.id}`);
+    
+
+    router.push(`/playlist/${newPlaylistResponse.snapshot_id.}`);
   };
 
   if (loading) return <LoadingCard hasHeaderSkeleton />;
@@ -113,72 +104,15 @@ export default function SelectGenres({ token }: { token: string }) {
           </CardDescription>
         </div>
         <div className="flex items-center justify-center">
-          <Dialog
-            open={namePlaylistDialogOpen}
-            onOpenChange={setNamePlaylistDialogOpen}
-          >
-            <DialogTrigger asChild>
-              <Button disabled={!atLeastOneGenreSelected}>
-                Create Playlist
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <Form {...playlistDetailsForm}>
-                <form
-                  onSubmit={playlistDetailsForm.handleSubmit(onSubmit)}
-                  className="flex flex-col gap-4"
-                >
-                  <DialogHeader className="font-semibold">
-                    Add Details
-                  </DialogHeader>
-                  <DialogDescription>
-                    Optionally name your playlist. If you don't name it, it will
-                    be called "GenreSplit Playlist"
-                  </DialogDescription>
-                  <FormField
-                    control={playlistDetailsForm.control}
-                    name="newPlaylistName"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Title</FormLabel>
-                        <FormControl>
-                          <Input placeholder="GenreSplit Playlist" {...field} />
-                        </FormControl>
-                        <FormMessage {...field} />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={playlistDetailsForm.control}
-                    name="newPlaylistDescription"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Description</FormLabel>
-                        <FormControl>
-                          <Textarea
-                            placeholder="This playlist was is based on..."
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage {...field} />
-                      </FormItem>
-                    )}
-                  />
-                  <DialogFooter>
-                    <Button type="submit">Create Playlist</Button>
-                  </DialogFooter>
-                </form>
-              </Form>
-            </DialogContent>
-          </Dialog>
+          <PlaylistDetailsDialog
+            namePlaylistDialogOpen={namePlaylistDialogOpen}
+            setNamePlaylistDialogOpen={setNamePlaylistDialogOpen}
+            atLeastOneGenreSelected={atLeastOneGenreSelected}
+            onSubmit={onSubmit}
+          />
         </div>
       </div>
       <GenresList genres={sortedGenres} token={token} />
     </Card>
   );
 }
-
-const playlistDetailsFormSchema = z.object({
-  newPlaylistName: z.string().max(100).optional(),
-  newPlaylistDescription: z.string().max(300).optional(),
-});

@@ -2,6 +2,7 @@ import { getArtistGenres } from "@/utils/api/artists/artists";
 import { getPlaylistTracksTracksInPlaylists } from "@/utils/api/playlists/playlist";
 import { GenreFrequency, PlaylistTrackObjectWithGenres } from "@/utils/types";
 import { useEffect, useState } from "react";
+import { useToast } from "../ui/use-toast";
 
 export default function useSortedGenres(
   selectedPlaylists: Set<string>,
@@ -11,6 +12,7 @@ export default function useSortedGenres(
   const [allTracksWithGenres, setAllTracksWithGenres] = useState<
     Set<PlaylistTrackObjectWithGenres>
   >(new Set());
+  const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     const addGenresToTracks = async () => {
@@ -54,6 +56,11 @@ export default function useSortedGenres(
         setAllTracksWithGenres(allTracksWithGenres);
       } catch (error) {
         console.error("Error adding genres to tracks:", error);
+
+        toast({
+          title: "Error adding genres to tracks",
+          description: "Please try again later.",
+        });
       } finally {
         setLoading(false);
       }
