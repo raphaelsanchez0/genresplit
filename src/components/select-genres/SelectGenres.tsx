@@ -69,26 +69,31 @@ export default function SelectGenres({ token }: { token: string }) {
   ) => {
     const userID = await getAuthenticatedUserID(token);
     const selectedGenres = new Set(selectedGenresParam!.split(",") || []);
-    const newPlaylistResponse = await createPlaylistFromGenres(
-      selectedGenres,
-      allTracksWithGenres,
+
+    let newPlaylistTrackURIs: string[] = [];
+
+    allTracksWithGenres.forEach((track) => {
+      if (track.genres.some((genre) => selectedGenres.has(genre))) {
+        newPlaylistTrackURIs.push(track.track?.uri!);
+      }
+    });
+
+    const newPlaylistName = values.newPlaylistName || "GenreSplit Playlist";
+    const newPlaylistResponse = await createPlaylist(
       userID,
-      values.newPlaylistName,
-      values.newPlaylistDescription,
+      newPlaylistName,
+      values.newPlaylistDescription || "",
+      true,
       token
     );
 
-    if (newPlaylistResponse.error) {
-      toast({
-        title: "Error creating playlist",
-        description: `${newPlaylistResponse.error}`,
-      });
-      return;
-    }
+    const addSongsToPlaylistResponse = await addSongsToPlaylist(
+      newPlaylistResponse.id,
+      newPlaylistTrackURIs,
+      token
+    );
 
-    
-
-    router.push(`/playlist/${newPlaylistResponse.snapshot_id.}`);
+    router.push(`/playlist/${newPlaylistResponse.id}`);
   };
 
   if (loading) return <LoadingCard hasHeaderSkeleton />;
