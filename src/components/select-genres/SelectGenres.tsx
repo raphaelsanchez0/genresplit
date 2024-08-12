@@ -100,7 +100,7 @@ export default function SelectGenres({ token }: { token: string }) {
     router.push(`/playlist/${newPlaylistResponse.id}`);
   };
 
-  if (loading) return <LoadingCard />;
+  if (loading) return <LoadingCard hasHeaderSkeleton />;
   return (
     <Card className="full-page-card">
       <div className="grid grid-cols-3">
