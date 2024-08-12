@@ -63,7 +63,7 @@ export default function PlaylistList({ token }: { token: string }) {
   if (loading) return <LoadingCard />;
 
   return (
-    <div className="grid grid-cols-3 w-full">
+    <div className="grid grid-cols-3 w-full gap-2 px-2">
       {playlists.map((playlist) => (
         <Playlist
           key={playlist.id}

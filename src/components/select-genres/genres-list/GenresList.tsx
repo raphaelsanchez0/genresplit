@@ -2,14 +2,19 @@ import useSearchParamGenres from "@/hooks/useSearchParamGenres";
 import { GenreFrequency } from "@/utils/types";
 import { useRouter, useSearchParams } from "next/navigation";
 import Genre from "../genre/Genre";
+import LoadingCard from "@/components/loading-card/LoadingCard";
+
+interface GenresListProps {
+  token: string;
+  genres: GenreFrequency[];
+  loading: boolean;
+}
 
 export default function GenresList({
   token,
   genres,
-}: {
-  token: string;
-  genres: GenreFrequency[];
-}) {
+  loading,
+}: GenresListProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const selectedGenres = useSearchParamGenres(searchParams);
@@ -26,6 +31,8 @@ export default function GenresList({
     newSearchParams.set("selectedGenres", newSelectedGenresArray.join(","));
     router.push(`?${newSearchParams.toString()}`, { scroll: false });
   };
+
+  if (loading) return <LoadingCard />;
 
   return (
     <div className="grid grid-cols-3 gap-4 p-4">
