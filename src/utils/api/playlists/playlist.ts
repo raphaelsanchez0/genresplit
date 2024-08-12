@@ -1,4 +1,4 @@
-import { fetchSpotifyURL } from "../spotify";
+import { createPostRequestHeaders, fetchSpotifyURL } from "../spotify";
 
 export async function getPlaylistTracks(
   playlistID: string,
@@ -47,10 +47,7 @@ export async function createPlaylist(
   token: string
 ) {
   const url = "https://api.spotify.com/v1/users/abccool2020/playlists";
-  const headers = {
-    Authorization: `Bearer ${token}`,
-    "Content-Type": "application/json",
-  };
+  const headers = createPostRequestHeaders(token);
   const response = await fetch(url, {
     method: "POST",
     headers,
@@ -65,4 +62,34 @@ export async function createPlaylist(
     throw new Error(`HTTP Error, Status ${response.status}`);
   }
   return response.json();
+}
+
+export function addPrefixToUri(uris: string[], type = "track") {
+  const uriPrefix = `spotify:${type}`;
+
+  const fullUris = uris.map((uri) => `${uriPrefix}${uri}`);
+  const uriString = fullUris.join(",");
+  return encodeURIComponent(uriString);
+}
+
+export async function addSongsToPlaylist(
+  playlistID: string,
+  uris: string[],
+  token: string
+) {
+  const url = `https://api.spotify.com/v1/playlists/${playlistID}/tracks`;
+
+  const response = await fetch(url, {
+    method: "POST",
+    headers: createPostRequestHeaders(token),
+    body: JSON.stringify({
+      uris: uris,
+    }),
+  });
+  if (!response.ok) {
+    throw new Error(`Error adding songs to playlist: ${response.status}`);
+  }
+
+  const data = await response.json();
+  return data;
 }

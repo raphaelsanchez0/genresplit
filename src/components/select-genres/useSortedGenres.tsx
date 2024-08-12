@@ -8,6 +8,9 @@ export default function useSortedGenres(
   token: string
 ) {
   const [sortedGenres, setSortedGenres] = useState<GenreFrequency[]>([]);
+  const [allTracksWithGenres, setAllTracksWithGenres] = useState<
+    Set<PlaylistTrackObjectWithGenres>
+  >(new Set());
   useEffect(() => {
     const addGenresToTracks = async () => {
       //Key: artistID, Value: Genres[]
@@ -44,12 +47,11 @@ export default function useSortedGenres(
         .sort((a, b) => b[1] - a[1])
         .map(([genre, frequency]) => ({ genre, frequency }));
 
-      console.log(sortedGenresArray);
-
       setSortedGenres(sortedGenresArray);
+      setAllTracksWithGenres(allTracksWithGenres);
     };
 
     addGenresToTracks();
   }, []);
-  return sortedGenres;
+  return { sortedGenres, allTracksWithGenres };
 }

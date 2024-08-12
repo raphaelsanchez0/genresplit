@@ -14,3 +14,11 @@ export async function fetchSpotifyURL(url: string, token: string) {
   }
   return response.json();
 }
+
+export function createPostRequestHeaders(token: string) {
+  const headers = {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json",
+  };
+  return headers;
+}
