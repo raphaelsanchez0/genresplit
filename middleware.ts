@@ -5,12 +5,10 @@ import type { NextRequest } from "next/server";
 export function middleware(request: NextRequest) {
   const currentUser = request.cookies.get(cookieNames.SPOTIFY_TOKEN)?.value;
 
-  const { origin } = new URL(request.url);
   if (!currentUser) {
-    const authURL = new URL(createAuthURL(), request.url);
     const url = request.nextUrl.clone();
     url.pathname = "/";
-    return NextResponse.redirect(origin);
+    return NextResponse.rewrite(url);
   }
 }
 
