@@ -6,7 +6,9 @@ export async function middleware(request: NextRequest) {
   const currentUser = request.cookies.get(cookieNames.SPOTIFY_TOKEN)?.value;
 
   if (!currentUser) {
-    return NextResponse.rewrite(new URL(createAuthURL()));
+    const authURL = new URL(createAuthURL(), request.url);
+    console.log(authURL);
+    return NextResponse.redirect(authURL);
   }
 }
 
