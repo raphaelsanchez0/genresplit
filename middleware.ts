@@ -7,8 +7,9 @@ export function middleware(request: NextRequest) {
 
   if (!currentUser) {
     const authURL = new URL(createAuthURL(), request.url);
-    console.log(authURL);
-    return NextResponse.redirect(authURL);
+    const url = request.nextUrl.clone();
+    url.pathname = "/";
+    return NextResponse.rewrite(url);
   }
 }
 
