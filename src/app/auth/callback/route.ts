@@ -34,6 +34,6 @@ export async function GET(request: Request) {
   }
 
   // Redirect to an error page if the code is not present
-  const errorUrl = new URL("/auth/auth-code-error", origin);
+  const errorUrl = new URL("/auth/auth-code-error/nocode", origin);
   return NextResponse.redirect(errorUrl.toString());
 }
