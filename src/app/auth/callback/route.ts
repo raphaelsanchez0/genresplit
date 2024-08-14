@@ -27,7 +27,12 @@ export async function GET(request: Request) {
       redirectUrl.pathname = pathToRouteOnToSuccessfulAuth;
       return NextResponse.redirect(redirectUrl.toString());
     } catch (error) {
-      console.error("Error exchanging code for token:", error);
+      const err = error as Error;
+      console.error("Error occurred while exchanging code for token:", {
+        code,
+        error: err.message,
+        stack: err.stack,
+      });
       const errorUrl = new URL("/auth/auth-code-error", origin);
       return NextResponse.redirect(errorUrl.toString());
     }
