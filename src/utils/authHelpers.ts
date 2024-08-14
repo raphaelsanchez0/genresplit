@@ -47,7 +47,9 @@ export async function exchangeCodeForToken(code: string): Promise<any> {
     const errorBody = await response.text();
 
     throw new SpotifyExchangeCodeForTokenError(
-      `Failed to exchange code for token: Status: ${response.status}, Body:${errorBody}`
+      `Failed to exchange code for token: Status: ${
+        response.status
+      }, Body:${errorBody}, redirectURI: ${getRedirectURI()}`
     );
   }
   return response.json();
