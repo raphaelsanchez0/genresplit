@@ -15,12 +15,13 @@ export async function GET(request: Request) {
     try {
       const tokenData = await exchangeCodeForToken(code);
       const cookieStore = cookies();
-
+      const secondsInHour = 3600000;
       cookieStore.set({
         name: cookieNames.SPOTIFY_TOKEN,
         value: tokenData.access_token,
         httpOnly: true,
         path: "/",
+        expires: Date.now() + secondsInHour,
       });
 
       const redirectUrl = new URL(next, origin);
