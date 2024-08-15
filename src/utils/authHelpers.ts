@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { cookieNames, spotify } from "./constants";
+import { cookieNames, localStorageKeys, spotify } from "./constants";
 import {
   SpotifyAuthError,
   SpotifyDataError,
@@ -94,4 +94,12 @@ export function getSpotifyToken() {
     throw new SpotifyTokenError("No Token Found");
   }
   return code;
+}
+
+export function saveSpotifyToken(token: string) {
+  localStorage.setItem(localStorageKeys.SPOTIFY_TOKEN, token);
+}
+
+export function getSpotifyTokenFromLocalStorage() {
+  return localStorage.getItem(localStorageKeys.SPOTIFY_TOKEN);
 }

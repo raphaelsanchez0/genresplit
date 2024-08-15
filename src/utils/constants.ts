@@ -28,6 +28,10 @@ export const cookieNames = {
   SPOTIFY_TOKEN: "spotify_token",
 };
 
+export const localStorageKeys = {
+  SPOTIFY_TOKEN: "spotify_token",
+};
+
 export const Colors = {
   PRIMARY: "#223122",
   SECONDARY: "#192524",
