@@ -19,7 +19,7 @@ export async function GET(request: Request) {
       cookieStore.set({
         name: cookieNames.SPOTIFY_TOKEN,
         value: tokenData.access_token,
-        httpOnly: true,
+        httpOnly: false,
         path: "/",
         expires: Date.now() + secondsInHour,
         sameSite: "lax",
