@@ -22,6 +22,7 @@ export async function GET(request: Request) {
         httpOnly: true,
         path: "/",
         expires: Date.now() + secondsInHour,
+        sameSite: "lax",
       });
 
       const redirectUrl = new URL(next, origin);
