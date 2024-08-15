@@ -23,6 +23,7 @@ export async function GET(request: Request) {
         path: "/",
         expires: Date.now() + secondsInHour,
         sameSite: "lax",
+        secure: true,
       });
 
       const redirectUrl = new URL(next, origin);
