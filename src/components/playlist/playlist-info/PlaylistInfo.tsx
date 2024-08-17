@@ -1,33 +1,60 @@
+"use client";
 import { Card } from "@/components/ui/card";
 import { fetchSpotifyURL } from "@/utils/api/spotify";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Track from "../track/Track";
 import { ExternalLink } from "lucide-react";
 import NavigationButtons from "./navigation-buttons/NavigationButtons";
+import { getSpotifyToken } from "@/utils/authHelpers";
+import { SpotifyTokenError } from "@/utils/errors";
+import { useRouter } from "next/navigation";
+import LoadingCard from "@/components/loading-card/LoadingCard";
 
 interface PlaylistInfoProps {
   id: string;
-  token: string;
 }
 
-export default async function PlaylistInfo({ id, token }: PlaylistInfoProps) {
-  const playlist: SpotifyApi.SinglePlaylistResponse = await fetchSpotifyURL(
-    `https://api.spotify.com/v1/playlists/${id}`,
-    token
-  );
+export default function PlaylistInfo({ id }: PlaylistInfoProps) {
+  const [playlist, setPlaylist] = useState<SpotifyApi.SinglePlaylistResponse>();
+  const [playlistTracks, setPlaylistTracks] =
+    useState<SpotifyApi.PlaylistTrackResponse>();
 
-  const playlistID = playlist.id;
-  const playlistTracks: SpotifyApi.PlaylistTrackResponse =
-    await fetchSpotifyURL(
-      `https://api.spotify.com/v1/playlists/${playlistID}/tracks`,
-      token
+  const token = getSpotifyToken();
+  useEffect(() => {
+    const getPlaylistInfo = async () => {
+      const playlist: SpotifyApi.SinglePlaylistResponse = await fetchSpotifyURL(
+        `https://api.spotify.com/v1/playlists/${id}`,
+        token
+      );
+
+      const playlistID = playlist.id;
+      const playlistTracks: SpotifyApi.PlaylistTrackResponse =
+        await fetchSpotifyURL(
+          `https://api.spotify.com/v1/playlists/${playlistID}/tracks`,
+          token
+        );
+
+      setPlaylist(playlist);
+      setPlaylistTracks(playlistTracks);
+    };
+
+    getPlaylistInfo();
+  });
+
+  if (!playlist || !playlistTracks) {
+    return (
+      <Card className="full-page-card">
+        <LoadingCard />
+      </Card>
     );
+  }
+
   return (
     <Card className="full-page-card">
       <div className="flex-1 flex flex-col p-4">
+        <NavigationButtons />
         <Card className="basis-1/4 p-4">
-          <NavigationButtons />
           <div className="flex flex-row gap-4">
             <div className="rounded-md overflow-hidden border">
               <img

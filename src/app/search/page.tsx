@@ -1,12 +1,14 @@
+"use client";
+import AuthGard from "@/components/auth-guard/AuthGard";
 import SearchPlaylists from "@/components/search-playlists/SearchPlaylists";
-import { getSpotifyToken } from "@/utils/authHelpers";
-import React from "react";
+import React, { Suspense } from "react";
 
 export default function Search() {
-  const token = getSpotifyToken();
   return (
     <div className="page">
-      <SearchPlaylists token={token} />
+      <AuthGard>
+        <SearchPlaylists />
+      </AuthGard>
     </div>
   );
 }

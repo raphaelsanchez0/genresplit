@@ -2,13 +2,14 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import Link from "next/link";
-
-import { cookieNames } from "@/utils/constants";
+import { useRouter } from "next/navigation";
+import { localStorageKeys, spotify } from "@/utils/constants";
 
 export default function LogoutButton() {
-  return (
-    <Button asChild>
-      <Link href="/logout">Logout</Link>
-    </Button>
-  );
+  const router = useRouter();
+  const handleLogout = () => {
+    localStorage.removeItem(localStorageKeys.SPOTIFY_TOKEN);
+    router.push("/");
+  };
+  return <Button onClick={() => handleLogout()}>Logout</Button>;
 }

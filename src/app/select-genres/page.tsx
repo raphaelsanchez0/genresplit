@@ -1,11 +1,15 @@
-import { getSpotifyToken } from "@/utils/authHelpers";
+"use client";
 import SelectGenres from "@/components/select-genres/SelectGenres";
+import { Suspense } from "react";
+import LoadingCard from "@/components/loading-card/LoadingCard";
+import AuthGard from "@/components/auth-guard/AuthGard";
 
 export default function SelectGenresPage() {
-  const token = getSpotifyToken();
   return (
     <div className="page">
-      <SelectGenres token={token} />
+      <AuthGard>
+        <SelectGenres />
+      </AuthGard>
     </div>
   );
 }

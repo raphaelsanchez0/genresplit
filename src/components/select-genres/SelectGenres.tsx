@@ -48,13 +48,15 @@ import PlaylistDetailsDialog, {
   playlistDetailsFormSchema,
 } from "./playlist-details-dialog/PlaylistDetailsDialog";
 import { useToast } from "../ui/use-toast";
+import { getSpotifyToken } from "@/utils/authHelpers";
 
-export default function SelectGenres({ token }: { token: string }) {
+export default function SelectGenres() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { toast } = useToast();
   const selectedPlaylists = useSearchParamPlaylists({ searchParams });
   const [namePlaylistDialogOpen, setNamePlaylistDialogOpen] = useState(false);
+  const token = getSpotifyToken();
 
   const { sortedGenres, allTracksWithGenres, loading } = useSortedGenres(
     selectedPlaylists,
@@ -70,11 +72,11 @@ export default function SelectGenres({ token }: { token: string }) {
     const userID = await getAuthenticatedUserID(token);
     const selectedGenres = new Set(selectedGenresParam!.split(",") || []);
 
-    let newPlaylistTrackURIs: string[] = [];
+    let newPlaylistTrackURIs = new Set<string>();
 
     allTracksWithGenres.forEach((track) => {
       if (track.genres.some((genre) => selectedGenres.has(genre))) {
-        newPlaylistTrackURIs.push(track.track?.uri!);
+        newPlaylistTrackURIs.add(track.track?.uri!);
       }
     });
 
@@ -89,7 +91,7 @@ export default function SelectGenres({ token }: { token: string }) {
 
     const addSongsToPlaylistResponse = await addSongsToPlaylist(
       newPlaylistResponse.id,
-      newPlaylistTrackURIs,
+      Array.from(newPlaylistTrackURIs),
       token
     );
 

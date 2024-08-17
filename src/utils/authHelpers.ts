@@ -1,5 +1,4 @@
-import { cookies } from "next/headers";
-import { cookieNames, spotify } from "./constants";
+import { cookieNames, localStorageKeys, spotify } from "./constants";
 import {
   SpotifyAuthError,
   SpotifyDataError,
@@ -10,10 +9,6 @@ import {
 const defaultResponseType = "code";
 const defaultShowDialog = true;
 
-export function getRedirectURI() {
-  return process.env.NEXT_PUBLIC_REDIRECT_URI!;
-}
-
 export function createAuthURL(
   authEndpoint: string = spotify.AUTH_ENDPOINT,
   clientID: string = spotify.CLIENT_ID,
@@ -23,6 +18,26 @@ export function createAuthURL(
 ) {
   console.log(getRedirectURI());
   return `${authEndpoint}?client_id=${clientID}&redirect_uri=${getRedirectURI()}&response_type=${responseType}&scope=${scopes}&show_dialog=${showDialog}`;
+}
+
+export function getSpotifyToken() {
+  const code = localStorage.getItem(localStorageKeys.SPOTIFY_TOKEN);
+  if (!code) {
+    throw new SpotifyTokenError("No Token Found");
+  }
+  return code;
+}
+
+export function saveSpotifyToken(token: string) {
+  localStorage.setItem(localStorageKeys.SPOTIFY_TOKEN, token);
+}
+
+export function getSpotifyTokenFromLocalStorage() {
+  return localStorage.getItem(localStorageKeys.SPOTIFY_TOKEN);
+}
+
+export function getRedirectURI() {
+  return process.env.NEXT_PUBLIC_REDIRECT_URI!;
 }
 
 export async function exchangeCodeForToken(code: string): Promise<any> {
@@ -53,45 +68,4 @@ export async function exchangeCodeForToken(code: string): Promise<any> {
     );
   }
   return response.json();
-}
-
-export async function getUser() {
-  const cookieStore = cookies();
-  const spotifyAuthCode = cookieStore.get(cookieNames.SPOTIFY_TOKEN)?.value;
-
-  if (!spotifyAuthCode) {
-    throw new SpotifyAuthError("Spotify authorization code is missing");
-  }
-
-  if (spotifyAuthCode) {
-    const response = await fetch("https://api.spotify.com/v1/me", {
-      headers: {
-        Authorization: `Bearer ${spotifyAuthCode}`,
-      },
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      return data;
-    }
-    throw new SpotifyDataError("Failed to fetch Spotify profile data");
-  }
-  throw new SpotifyAuthError("Spotify authorization code is missing");
-}
-
-export async function userAuthenticated() {
-  try {
-    await getUser();
-    return true;
-  } catch (e) {
-    return false;
-  }
-}
-
-export function getSpotifyToken() {
-  const code = cookies().get(cookieNames.SPOTIFY_TOKEN)?.value;
-  if (!code) {
-    throw new SpotifyTokenError("No Token Found");
-  }
-  return code;
 }
