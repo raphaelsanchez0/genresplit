@@ -8,7 +8,7 @@ import Playlist from "../playlist/Playlist";
 import useSearchParamPlaylists from "@/hooks/useSearchParamPlaylists";
 import LoadingCard from "@/components/loading-card/LoadingCard";
 
-export default function PlaylistList({ token }: { token: string }) {
+export default function PlaylistList() {
   const [playlists, setPlaylists] = useState<
     SpotifyApi.PlaylistObjectSimplified[]
   >([]);
@@ -39,6 +39,7 @@ export default function PlaylistList({ token }: { token: string }) {
   useEffect(() => {
     const fetchPlaylists = async () => {
       setLoading(true);
+      const token = getSpotifyToken();
       if (query) {
         const playlists: SpotifyApi.PlaylistSearchResponse =
           await fetchSpotifyURL(

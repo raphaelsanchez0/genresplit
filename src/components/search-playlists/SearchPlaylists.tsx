@@ -8,7 +8,6 @@ import { Button } from "../ui/button";
 import { useRouter, useSearchParams } from "next/navigation";
 
 export default function SearchPlaylists() {
-  const token = getSpotifyToken();
   const searchParams = useSearchParams();
   const router = useRouter();
   const selectedPlaylistsParam = searchParams.get("selectedPlaylists");
@@ -37,7 +36,7 @@ export default function SearchPlaylists() {
         </div>
       </div>
 
-      <PlaylistList token={token} />
+      <PlaylistList />
     </Card>
   );
 }
