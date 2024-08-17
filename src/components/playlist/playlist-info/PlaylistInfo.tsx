@@ -7,6 +7,8 @@ import Track from "../track/Track";
 import { ExternalLink } from "lucide-react";
 import NavigationButtons from "./navigation-buttons/NavigationButtons";
 import { getSpotifyToken } from "@/utils/authHelpers";
+import { SpotifyTokenError } from "@/utils/errors";
+import { useRouter } from "next/navigation";
 
 interface PlaylistInfoProps {
   id: string;

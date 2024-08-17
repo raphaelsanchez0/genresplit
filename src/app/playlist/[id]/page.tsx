@@ -1,5 +1,4 @@
 import PlaylistInfo from "@/components/playlist/playlist-info/PlaylistInfo";
-import { getSpotifyToken } from "@/utils/authHelpers";
 import React from "react";
 
 interface PlaylistProps {
