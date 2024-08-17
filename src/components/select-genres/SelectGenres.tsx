@@ -72,11 +72,11 @@ export default function SelectGenres() {
     const userID = await getAuthenticatedUserID(token);
     const selectedGenres = new Set(selectedGenresParam!.split(",") || []);
 
-    let newPlaylistTrackURIs: string[] = [];
+    let newPlaylistTrackURIs = new Set<string>();
 
     allTracksWithGenres.forEach((track) => {
       if (track.genres.some((genre) => selectedGenres.has(genre))) {
-        newPlaylistTrackURIs.push(track.track?.uri!);
+        newPlaylistTrackURIs.add(track.track?.uri!);
       }
     });
 
@@ -91,7 +91,7 @@ export default function SelectGenres() {
 
     const addSongsToPlaylistResponse = await addSongsToPlaylist(
       newPlaylistResponse.id,
-      newPlaylistTrackURIs,
+      Array.from(newPlaylistTrackURIs),
       token
     );
 
