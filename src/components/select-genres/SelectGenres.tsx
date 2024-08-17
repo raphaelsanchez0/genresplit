@@ -48,13 +48,15 @@ import PlaylistDetailsDialog, {
   playlistDetailsFormSchema,
 } from "./playlist-details-dialog/PlaylistDetailsDialog";
 import { useToast } from "../ui/use-toast";
+import { getSpotifyToken } from "@/utils/authHelpers";
 
-export default function SelectGenres({ token }: { token: string }) {
+export default function SelectGenres() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { toast } = useToast();
   const selectedPlaylists = useSearchParamPlaylists({ searchParams });
   const [namePlaylistDialogOpen, setNamePlaylistDialogOpen] = useState(false);
+  const token = getSpotifyToken();
 
   const { sortedGenres, allTracksWithGenres, loading } = useSortedGenres(
     selectedPlaylists,

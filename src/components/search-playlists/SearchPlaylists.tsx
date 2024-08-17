@@ -7,7 +7,8 @@ import { getSpotifyToken } from "@/utils/authHelpers";
 import { Button } from "../ui/button";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export default function SearchPlaylists({ token }: { token: string }) {
+export default function SearchPlaylists() {
+  const token = getSpotifyToken();
   const searchParams = useSearchParams();
   const router = useRouter();
   const selectedPlaylistsParam = searchParams.get("selectedPlaylists");

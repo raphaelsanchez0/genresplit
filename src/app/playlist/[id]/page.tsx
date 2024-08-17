@@ -9,10 +9,9 @@ interface PlaylistProps {
 }
 
 export default function Playlist({ params: { id } }: PlaylistProps) {
-  const token = getSpotifyToken();
   return (
     <div className="page">
-      <PlaylistInfo id={id} token={token} />
+      <PlaylistInfo id={id} />
     </div>
   );
 }

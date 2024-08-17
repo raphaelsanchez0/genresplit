@@ -1,28 +1,48 @@
+"use client";
 import { Card } from "@/components/ui/card";
 import { fetchSpotifyURL } from "@/utils/api/spotify";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Track from "../track/Track";
 import { ExternalLink } from "lucide-react";
 import NavigationButtons from "./navigation-buttons/NavigationButtons";
+import { getSpotifyToken } from "@/utils/authHelpers";
 
 interface PlaylistInfoProps {
   id: string;
-  token: string;
 }
 
-export default async function PlaylistInfo({ id, token }: PlaylistInfoProps) {
-  const playlist: SpotifyApi.SinglePlaylistResponse = await fetchSpotifyURL(
-    `https://api.spotify.com/v1/playlists/${id}`,
-    token
-  );
+export default function PlaylistInfo({ id }: PlaylistInfoProps) {
+  const [playlist, setPlaylist] = useState<SpotifyApi.SinglePlaylistResponse>();
+  const [playlistTracks, setPlaylistTracks] =
+    useState<SpotifyApi.PlaylistTrackResponse>();
 
-  const playlistID = playlist.id;
-  const playlistTracks: SpotifyApi.PlaylistTrackResponse =
-    await fetchSpotifyURL(
-      `https://api.spotify.com/v1/playlists/${playlistID}/tracks`,
-      token
-    );
+  const token = getSpotifyToken();
+  useEffect(() => {
+    const getPlaylistInfo = async () => {
+      const playlist: SpotifyApi.SinglePlaylistResponse = await fetchSpotifyURL(
+        `https://api.spotify.com/v1/playlists/${id}`,
+        token
+      );
+
+      const playlistID = playlist.id;
+      const playlistTracks: SpotifyApi.PlaylistTrackResponse =
+        await fetchSpotifyURL(
+          `https://api.spotify.com/v1/playlists/${playlistID}/tracks`,
+          token
+        );
+
+      setPlaylist(playlist);
+      setPlaylistTracks(playlistTracks);
+    };
+
+    getPlaylistInfo();
+  });
+
+  if (!playlist || !playlistTracks) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <Card className="full-page-card">
       <div className="flex-1 flex flex-col p-4">
