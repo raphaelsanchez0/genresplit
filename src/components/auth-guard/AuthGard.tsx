@@ -23,7 +23,11 @@ export default function AuthGard({ children }: AuthGardProps) {
   }, [router]);
 
   if (!isAuthenticated) {
-    return <LoadingCard />;
+    return (
+      <div className="page">
+        <LoadingCard />
+      </div>
+    );
   }
   return <>{children}</>;
 }

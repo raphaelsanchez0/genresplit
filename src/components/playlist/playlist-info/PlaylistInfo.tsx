@@ -9,6 +9,7 @@ import NavigationButtons from "./navigation-buttons/NavigationButtons";
 import { getSpotifyToken } from "@/utils/authHelpers";
 import { SpotifyTokenError } from "@/utils/errors";
 import { useRouter } from "next/navigation";
+import LoadingCard from "@/components/loading-card/LoadingCard";
 
 interface PlaylistInfoProps {
   id: string;
@@ -42,7 +43,11 @@ export default function PlaylistInfo({ id }: PlaylistInfoProps) {
   });
 
   if (!playlist || !playlistTracks) {
-    return <div>Loading...</div>;
+    return (
+      <Card className="full-page-card">
+        <LoadingCard />
+      </Card>
+    );
   }
 
   return (
