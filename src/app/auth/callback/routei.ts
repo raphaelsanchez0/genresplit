@@ -1,5 +1,5 @@
 import { exchangeCodeForToken } from "@/utils/authHelpers";
-import { cookieNames } from "@/utils/constants";
+import { cookieNames, localStorageKeys } from "@/utils/constants";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
@@ -14,17 +14,7 @@ export async function GET(request: Request) {
   if (code) {
     try {
       const tokenData = await exchangeCodeForToken(code);
-      const cookieStore = cookies();
-      const secondsInHour = 3600000;
-      cookieStore.set({
-        name: cookieNames.SPOTIFY_TOKEN,
-        value: tokenData.access_token,
-        httpOnly: false,
-        path: "/",
-        expires: Date.now() + secondsInHour,
-        sameSite: "lax",
-        secure: true,
-      });
+      const token: string = tokenData.access_token;
 
       const redirectUrl = new URL(next, origin);
       redirectUrl.pathname = pathToRouteOnToSuccessfulAuth;
