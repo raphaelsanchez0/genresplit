@@ -1,12 +1,11 @@
 "use client";
+import LoadingCard from "@/components/loading-card/LoadingCard";
+import useSearchParamPlaylists from "@/hooks/useSearchParamPlaylists";
 import { fetchSpotifyURL } from "@/utils/api/spotify";
 import { getSpotifyToken } from "@/utils/authHelpers";
-import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import Playlist from "../playlist/Playlist";
-import useSearchParamPlaylists from "@/hooks/useSearchParamPlaylists";
-import LoadingCard from "@/components/loading-card/LoadingCard";
 
 export default function PlaylistList() {
   const [playlists, setPlaylists] = useState<
@@ -64,7 +63,7 @@ export default function PlaylistList() {
   if (loading) return <LoadingCard />;
 
   return (
-    <div className="grid grid-cols-3 w-full gap-2 px-2">
+    <div className="grid md:grid-cols-3 grid-cols-1 w-full gap-2 px-2">
       {playlists.map((playlist) => (
         <Playlist
           key={playlist.id}

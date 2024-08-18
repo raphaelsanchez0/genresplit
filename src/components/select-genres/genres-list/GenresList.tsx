@@ -35,7 +35,7 @@ export default function GenresList({
   if (loading) return <LoadingCard />;
 
   return (
-    <div className="grid grid-cols-3 gap-4 p-4">
+    <div className="grid md:grid-cols-3 grid-cols-1 gap-4 p-4">
       {genres.map((genre) => (
         <Genre
           key={genre.genre}

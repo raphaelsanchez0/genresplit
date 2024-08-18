@@ -1,6 +1,4 @@
-import Image from "next/image";
 import React from "react";
-import heroImage from "@/assets/img/hero-image.png";
 import { Button } from "../ui/button";
 import { createAuthURL } from "@/utils/authURLHelper";
 import Link from "next/link";
@@ -9,8 +7,8 @@ import Script from "next/script";
 export default function Landing() {
   return (
     <div className="bg-secondary-color max-w-5xl">
-      <div className="flex flex-col items-center gap-6 py-8">
-        <h1 className="text-6xl font-extrabold text-white text-center">
+      <div className="flex flex-col items-center md:gap-6 py-8 gap-16">
+        <h1 className="text-6xl font-extrabold text-white text-center mt-6 md:mt-0">
           Split your Playlist by Genre
         </h1>
         <p className="text-lg  text-slate-400 text-center tracking-tight max-w-2xl">
@@ -41,7 +39,7 @@ export default function Landing() {
           </div>
         </div>
       </div>
-      <div className="flex justify-between pt-24">
+      <div className="flex justify-between pt-24 mt-[200px]">
         <p className="landing-footer-text">
           {
             "Made by Raphael Sanchez - GenreSplit is not related to Spotify AB or any of it’s partners in any way"

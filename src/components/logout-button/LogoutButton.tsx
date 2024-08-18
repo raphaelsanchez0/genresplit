@@ -1,9 +1,7 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { Button } from "../ui/button";
-import Link from "next/link";
+import { localStorageKeys } from "@/utils/constants";
 import { useRouter } from "next/navigation";
-import { localStorageKeys, spotify } from "@/utils/constants";
+import { Button } from "../ui/button";
 
 export default function LogoutButton() {
   const router = useRouter();

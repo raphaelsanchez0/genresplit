@@ -3,7 +3,7 @@
 import { exchangeCodeForToken } from "@/utils/authHelpers";
 import { localStorageKeys } from "@/utils/constants";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { use, useEffect } from "react";
+import React, { useEffect } from "react";
 import LoadingCard from "../loading-card/LoadingCard";
 import { Card } from "../ui/card";
 
