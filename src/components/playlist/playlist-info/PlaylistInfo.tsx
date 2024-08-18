@@ -52,7 +52,7 @@ export default function PlaylistInfo({ id }: PlaylistInfoProps) {
 
   return (
     <Card className="full-page-card">
-      <div className="flex-1 flex flex-col p-4">
+      <div className="flex-1 flex flex-col md:p-4 p-2">
         <NavigationButtons />
         <Card className="basis-1/4 p-4">
           <div className="flex flex-row gap-4">
@@ -62,6 +62,14 @@ export default function PlaylistInfo({ id }: PlaylistInfoProps) {
                 alt={`${playlist.name} Playlist Cover Image`}
                 width={200}
                 height={200}
+                className="hide-when-mobile"
+              />
+              <img
+                src={playlist.images[1].url}
+                alt={`${playlist.name} Playlist Cover Image`}
+                width={100}
+                height={100}
+                className="hide-when-desktop"
               />
             </div>
             <div className="flex flex-col justify-center">
@@ -72,13 +80,13 @@ export default function PlaylistInfo({ id }: PlaylistInfoProps) {
                 </a>
               </div>
               <p className="text-md text-gray-600">{playlist.description}</p>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-gray-600 md:mt-0 mt-1">
                 {playlist.tracks.total} tracks
               </p>
             </div>
           </div>
         </Card>
-        <div className="basis-3/4 p-4">
+        <div className="basis-3/4 md:p-4">
           <h2 className="text-2xl font-bold">Tracks</h2>
           {playlistTracks.items.map((track) => (
             <Track track={track} key={track?.track?.id} />

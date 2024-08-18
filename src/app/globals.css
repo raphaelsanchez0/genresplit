@@ -20,7 +20,12 @@
   @apply text-slate-300 font-light text-sm;
 }
 
-.privacy-body {
+.hide-when-mobile {
+  @apply hidden md:block;
+}
+
+.hide-when-desktop {
+  @apply block md:hidden;
 }
 
 @layer base {
