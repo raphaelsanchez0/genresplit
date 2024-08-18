@@ -4,6 +4,7 @@ import heroImage from "@/assets/img/hero-image.png";
 import { Button } from "../ui/button";
 import { createAuthURL } from "@/utils/authURLHelper";
 import Link from "next/link";
+import Script from "next/script";
 
 export default function Landing() {
   return (
@@ -36,7 +37,7 @@ export default function Landing() {
               className="w-full h-full"
               title="Genresplit Demo"
             ></iframe>
-            <script src="https://player.vimeo.com/api/player.js"></script>
+            <Script src="https://player.vimeo.com/api/player.js"></Script>
           </div>
         </div>
       </div>
