@@ -5,3 +5,5 @@ Organizes large, unsorted Spotify playlists by genre. Users select a playlist, v
 ## Split any playlist
 
 Select your preferred genres from a playlist, then generate new playlists featuring your chosen genres.
+
+![Choose Genres]()
