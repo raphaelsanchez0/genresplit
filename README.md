@@ -6,4 +6,8 @@ Organizes large, unsorted Spotify playlists by genre. Users select a playlist, v
 
 Select your preferred genres from a playlist, then generate new playlists featuring your chosen genres.
 
-![Choose Genres]()
+![Choose Playlists](https://genresplit.vercel.app/playlists-example.png)
+
+![Choose Genres](https://genresplit.vercel.app/genres-example.png)
+
+The above example will create a playlist with any songs in "favorites" and "On Repeat" that are "rock", "art rock", and "social pop punk".
