@@ -5,8 +5,10 @@ import Image from "next/image";
 export default function Home() {
   return (
     <main>
-      <NavbarLanding />
-      <Landing />
+      <div className="bg-secondary-color min-h-screen flex items-center flex-col">
+        <NavbarLanding />
+        <Landing />
+      </div>
     </main>
   );
 }
