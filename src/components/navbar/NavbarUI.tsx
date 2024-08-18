@@ -1,7 +1,5 @@
-import LoginButton from "../login-button/LoginButton";
-import { usePathname } from "next/navigation";
-import LogoutButton from "../logout-button/LogoutButton";
 import Link from "next/link";
+import LogoutButton from "../logout-button/LogoutButton";
 
 export default function NavbarUI() {
   return (

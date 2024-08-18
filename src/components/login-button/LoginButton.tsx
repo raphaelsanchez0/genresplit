@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { Button } from "../ui/button";
-import Link from "next/link";
 import { createAuthURL } from "@/utils/authURLHelper";
-import { cookieNames } from "@/utils/constants";
+import Link from "next/link";
+import { Button } from "../ui/button";
 export default function LoginButton() {
   return (
     <Button asChild>

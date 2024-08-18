@@ -1,8 +1,5 @@
-import React from "react";
-import LoginButton from "../login-button/LoginButton";
-import { usePathname } from "next/navigation";
-import LogoutButton from "../logout-button/LogoutButton";
 import Link from "next/link";
+import LoginButton from "../login-button/LoginButton";
 
 export default function NavbarLanding() {
   return (

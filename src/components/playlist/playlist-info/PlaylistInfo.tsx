@@ -1,15 +1,12 @@
 "use client";
+import LoadingCard from "@/components/loading-card/LoadingCard";
 import { Card } from "@/components/ui/card";
 import { fetchSpotifyURL } from "@/utils/api/spotify";
-import React, { useEffect, useState } from "react";
-import Image from "next/image";
-import Track from "../track/Track";
-import { ExternalLink } from "lucide-react";
-import NavigationButtons from "./navigation-buttons/NavigationButtons";
 import { getSpotifyToken } from "@/utils/authHelpers";
-import { SpotifyTokenError } from "@/utils/errors";
-import { useRouter } from "next/navigation";
-import LoadingCard from "@/components/loading-card/LoadingCard";
+import { ExternalLink } from "lucide-react";
+import { useEffect, useState } from "react";
+import Track from "../track/Track";
+import NavigationButtons from "./navigation-buttons/NavigationButtons";
 
 interface PlaylistInfoProps {
   id: string;

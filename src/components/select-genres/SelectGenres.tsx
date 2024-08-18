@@ -1,21 +1,21 @@
 "use client";
-import { useRouter, useSearchParams } from "next/navigation";
-import React, { use, useEffect, useState } from "react";
-import { Card, CardDescription, CardTitle } from "../ui/card";
 import useSearchParamPlaylists from "@/hooks/useSearchParamPlaylists";
 import {
   addSongsToPlaylist,
   createPlaylist,
 } from "@/utils/api/playlists/playlist";
-import GenresList from "./genres-list/GenresList";
-import useSortedGenres from "./useSortedGenres";
 import { getAuthenticatedUserID } from "@/utils/api/user/user";
+import { getSpotifyToken } from "@/utils/authHelpers";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
 import { z } from "zod";
+import { Card, CardDescription, CardTitle } from "../ui/card";
+import { useToast } from "../ui/use-toast";
+import GenresList from "./genres-list/GenresList";
 import PlaylistDetailsDialog, {
   playlistDetailsFormSchema,
 } from "./playlist-details-dialog/PlaylistDetailsDialog";
-import { useToast } from "../ui/use-toast";
-import { getSpotifyToken } from "@/utils/authHelpers";
+import useSortedGenres from "./useSortedGenres";
 
 export default function SelectGenres() {
   const searchParams = useSearchParams();

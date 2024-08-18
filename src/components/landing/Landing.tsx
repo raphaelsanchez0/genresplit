@@ -1,6 +1,4 @@
-import Image from "next/image";
 import React from "react";
-import heroImage from "@/assets/img/hero-image.png";
 import { Button } from "../ui/button";
 import { createAuthURL } from "@/utils/authURLHelper";
 import Link from "next/link";

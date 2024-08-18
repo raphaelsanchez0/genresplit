@@ -1,11 +1,9 @@
 "use client";
-import React from "react";
-import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
-import SearchBar from "./search-bar/SearchBar";
-import PlaylistList from "./playlists-list/PlaylistList";
-import { getSpotifyToken } from "@/utils/authHelpers";
-import { Button } from "../ui/button";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Button } from "../ui/button";
+import { Card, CardDescription, CardTitle } from "../ui/card";
+import PlaylistList from "./playlists-list/PlaylistList";
+import SearchBar from "./search-bar/SearchBar";
 
 export default function SearchPlaylists() {
   const searchParams = useSearchParams();
