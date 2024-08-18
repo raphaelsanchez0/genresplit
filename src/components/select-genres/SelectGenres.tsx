@@ -6,44 +6,11 @@ import useSearchParamPlaylists from "@/hooks/useSearchParamPlaylists";
 import {
   addSongsToPlaylist,
   createPlaylist,
-  createPlaylistFromGenres,
-  getPlaylistTracks,
-  getPlaylistTracksTracksInPlaylists,
 } from "@/utils/api/playlists/playlist";
-import {
-  getArtistGenres,
-  getArtistsFrequencyInPlaylists,
-} from "@/utils/api/artists/artists";
 import GenresList from "./genres-list/GenresList";
-import useSearchParamGenres from "@/hooks/useSearchParamGenres";
-import { Button } from "../ui/button";
 import useSortedGenres from "./useSortedGenres";
 import { getAuthenticatedUserID } from "@/utils/api/user/user";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTrigger,
-  DialogDescription,
-  DialogFooter,
-} from "../ui/dialog";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
 import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../ui/form";
-import { Textarea } from "../ui/textarea";
-import { Skeleton } from "../ui/skeleton";
-import LoadingCard from "../loading-card/LoadingCard";
 import PlaylistDetailsDialog, {
   playlistDetailsFormSchema,
 } from "./playlist-details-dialog/PlaylistDetailsDialog";
@@ -100,7 +67,7 @@ export default function SelectGenres() {
 
   return (
     <Card className="full-page-card">
-      <div className="grid grid-cols-3">
+      <div className="md:grid md:grid-cols-3 flex flex-col">
         <div className="flex flex-col items-center justify-center p-6 gap-4 col-start-2 col-end-3">
           <CardTitle className="text-5xl text-stone-950 text-center">
             Select Genres
