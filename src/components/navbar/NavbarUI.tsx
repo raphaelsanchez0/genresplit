@@ -4,9 +4,11 @@ import LogoutButton from "../logout-button/LogoutButton";
 
 export default function NavbarUI() {
   return (
-    <div className="w-full flex bg-secondary-color items-center p-4">
-      <h1 className="text-accent-color mr-auto">GenreSplit</h1>
-      <LogoutButton />
+    <div className="w-full bg-secondary-color p-4 justify-center">
+      <div className="flex w-3/4 items-center mx-auto justify-between">
+        <h1 className="text-accent-color mr-auto">GenreSplit</h1>
+        <LogoutButton />
+      </div>
     </div>
   );
 }
