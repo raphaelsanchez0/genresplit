@@ -40,13 +40,13 @@ export default function Landing() {
           </div>
         </div>
       </div>
-      <div>
-        <p>
+      <div className="flex justify-between pt-24">
+        <p className="landing-footer-text">
           {
             "Made by Raphael Sanchez - GenreSplit is not related to Spotify AB or any of it’s partners in any way"
           }
         </p>
-        <p>Privacy Policy</p>
+        <p className="landing-footer-text">Privacy Policy</p>
       </div>
     </div>
   );
