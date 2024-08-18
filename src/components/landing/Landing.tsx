@@ -46,7 +46,9 @@ export default function Landing() {
             "Made by Raphael Sanchez - GenreSplit is not related to Spotify AB or any of it’s partners in any way"
           }
         </p>
-        <p className="landing-footer-text">Privacy Policy</p>
+        <Link className="landing-footer-text" href="/privacy-policy">
+          Privacy Policy
+        </Link>
       </div>
     </div>
   );
